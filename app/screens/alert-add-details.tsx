@@ -1,66 +1,52 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
-  TextInput,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  ScrollView,
+  Image,
 } from 'react-native';
 import {ImageType} from '../types';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import ImageList from '../components/ui/image-list';
+import Title from '../components/ui/title';
+import IntroText from '../components/ui/intro-text';
+import {uiText} from '../constants/ui.constans';
+import InputText from '../components/ui/text-input';
+import Label from '../components/ui/label';
 
 const logo = require('../assets/ui-icons/anadir-foto.png');
 
 const screenWidth = Dimensions.get('window').width;
 
-const options = {
-  mediaType: 'photo',
-  title: 'select image',
-  maxWidth: 2000,
-  maxHeight: 2000,
-  quality: 0.8,
-  // includeBase64: true,
-};
-
-interface ImageItem {
-  localUri: string;
-}
-
 const AlertAddDetails = () => {
   const [description, setDescription] = useState('');
-  const [selectedImages, setSelectedImages] = useState<ImageItem[]>([
-    {
-      localUri: '',
-    },
-    {
-      localUri: '',
-    },
-    {
-      localUri: '',
-    },
-  ]);
+  const [selectedImages, setSelectedImages] = useState<ImageType[]>([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log(selectedImages);
-  }, [selectedImages]);
-
+  const options = {
+    mediaType: 'photo',
+    title: 'select image',
+    maxWidth: 2000,
+    maxHeight: 2000,
+    quality: 0.8,
+  };
   const openImage = async () => {
     if (selectedImages.length < 3) {
       const result = (await launchImageLibrary(options as any)) as {
         assets: ImageType[];
-        canceled: boolean;
+        didCancel: boolean;
       };
-      if (!result.canceled) {
-        setSelectedImages(prevImages => [
-          ...prevImages,
-          {localUri: result.assets[0].uri},
-        ]);
+      if (!result.didCancel) {
+        setSelectedImages(
+          prevImages =>
+            [...prevImages, {uri: result.assets[0].uri}] as ImageType[],
+        );
       }
     }
   };
@@ -69,13 +55,13 @@ const AlertAddDetails = () => {
     if (selectedImages.length < 3) {
       const result = (await launchCamera(options as any)) as {
         assets: ImageType[];
-        canceled: boolean;
+        didCancel: boolean;
       };
-      if (!result.canceled) {
-        setSelectedImages(prevImages => [
-          ...prevImages,
-          {localUri: result.assets[0].uri},
-        ]);
+      if (!result.didCancel) {
+        setSelectedImages(
+          prevImages =>
+            [...prevImages, {uri: result.assets[0].uri}] as ImageType[],
+        );
       }
     }
   };
@@ -87,120 +73,99 @@ const AlertAddDetails = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Importante</Text>
-      <Text style={styles.introText}>
-        Tu participación es clave para fortalecer la seguridad. Por favor,
-        agrega detalles adicionales sobre la alerta, como una descripción
-        opcional y fotos relevantes. Esta información es crucial para la policía
-        de PLA y contribuirá significativamente a mejorar la eficacia de las
-        respuestas de emergencia, garantizando un entorno más seguro para todos.
-      </Text>
-      <Text style={styles.title}>Detalles de la Alerta</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Descripción opcional"
-        value={description}
-        multiline
-        numberOfLines={4}
-        onChangeText={text => setDescription(text)}
-      />
-      <Text style={styles.titleCamera}>
-        Agrega fotos (máximo {3 - selectedImages.length})
-      </Text>
-      <View style={styles.imageContainer}>
-        {selectedImages?.map((item, index) => (
-          <Image
-            key={index}
-            source={item?.localUri ? {uri: item.localUri} : logo}
-            style={styles.selectedImage}
-          />
-        ))}
-      </View>
+    <SafeAreaView style={styles.safeAreaView}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Title content={uiText.AddAlertDetails.title1} />
+        <IntroText content={uiText.AddAlertDetails.textIntro} />
+        <Label content={uiText.AddAlertDetails.label} />
+        <InputText
+          placeholder={uiText.AddAlertDetails.placeholder}
+          value={description}
+          onChangeTextCallback={setDescription}
+        />
+        <Text style={styles.titleCamera}>
+          Agrega fotos (máximo {3 - selectedImages.length})
+        </Text>
+        <View style={styles.imageContainer}>
+          <ImageList data={selectedImages} />
+          {[...Array(3 - selectedImages.length)].map((_, index) => (
+            <Image key={index} source={logo} />
+          ))}
+        </View>
 
-      <View style={styles.imageButtonsContainer}>
+        <View style={styles.imageButtonsContainer}>
+          <TouchableOpacity
+            style={styles.cameraButton}
+            onPress={openImage}
+            disabled={selectedImages.length >= 3}>
+            <Icon name="image-search" size={30} color="white" />
+            <Text style={styles.imageButtonText}>Galería</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cameraButton}
+            onPress={openCamera}
+            disabled={selectedImages.length >= 3}>
+            <Icon name="camera" size={30} color="white" />
+            <Text style={styles.imageButtonText}>Foto</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
-          style={styles.cameraButton}
-          onPress={openImage}
-          disabled={selectedImages.length >= 3}>
-          <Icon name="image-search" size={30} color="white" />
-          <Text style={styles.imageButtonText}>Galería</Text>
+          style={styles.submitButton}
+          onPress={handleAddDetails}>
+          <Text style={styles.buttonText}>Guardar Alerta</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.cameraButton}
-          onPress={openCamera}
-          disabled={selectedImages.length >= 3}>
-          <Icon name="camera" size={30} color="white" />
-          <Text style={styles.imageButtonText}>Foto</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.submitButton} onPress={handleAddDetails}>
-        <Text style={styles.buttonText}>Guardar Alerta</Text>
-      </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaView: {
     flex: 1,
-    paddingHorizontal: 20,
-    marginTop: -10,
+  },
+  container: {
+    flexGrow: 1,
+    padding: '4%',
     justifyContent: 'space-around',
-  },
-  title: {
-    fontSize: screenWidth * 0.06,
-    fontWeight: 'bold',
-  },
-  introText: {
-    fontSize: 17,
-    textAlign: 'justify',
-  },
-  input: {
-    height: 45,
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 10,
-  },
-  titleCamera: {
-    textAlign: 'center',
-    fontSize: 25,
-    fontWeight: 'bold',
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  selectedImage: {
-    width: 100,
-    height: 100,
   },
   imageButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  cameraButton: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#725599',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: '4%',
   },
   imageButtonText: {
     color: 'white',
-    marginTop: 5,
+    marginTop: '2%',
   },
   submitButton: {
     backgroundColor: '#725599',
-    padding: 20,
+    padding: '5%',
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    alignItems: 'center',
+  },
+  titleCamera: {
     textAlign: 'center',
+    fontSize: screenWidth * 0.06,
+    fontWeight: 'bold',
+    marginBottom: '2%',
+  },
+  cameraButton: {
+    width: screenWidth * 0.25,
+    height: screenWidth * 0.25,
+    borderRadius: screenWidth * 0.15,
+    backgroundColor: '#725599',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: '7%',
   },
 });
 
