@@ -1,0 +1,36 @@
+{
+  "ProfileScreen": {
+    "profileInfo": [
+      {
+        "label": "Nombre del Usuario",
+        "value": "Ejemplificador"
+      },
+      {
+        "label": "DNI",
+        "value": "12345678"
+      },
+      {
+        "label": "Domicilio",
+        "value": "Calle Ejemplo 123"
+      },
+      {
+        "label": "Número de Teléfono",
+        "value": "123-456-7890"
+      }
+    ],
+    "emergencyContactInfo": [
+      {
+        "label": "Nombre del Contacto",
+        "value": "Ejemplificador"
+      },
+      {
+        "label": "Domicilio",
+        "value": "Calle Ejemplo 123"
+      },
+      {
+        "label": "Número de Teléfono",
+        "value": "123-456-7890"
+      }
+    ]
+  }
+}
