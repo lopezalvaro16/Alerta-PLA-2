@@ -66,7 +66,9 @@ const AlertDetail: React.FC<AlertDetailProps> = () => {
       //   autoHide: true,
       // });
       const json = await response.json();
-      if (!response.ok) throw new Error(json.message);
+      if (!response.ok) {
+        throw new Error(json.message);
+      }
       setShowSentMessage(true);
       // navigation.goBack();
       showSuccessAlert();
