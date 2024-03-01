@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker, {ImagePickerResponse} from 'react-native-image-picker';
 
 import logo from '../assets/ui-icons/usuario.png';
 
@@ -17,7 +17,7 @@ const EditarFotoPerfil: React.FC = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchImageLibrary(options, response => {
+    ImagePicker.launchImageLibrary(options, (response: ImagePickerResponse) => {
       if (response.didCancel) {
         return;
       }
@@ -32,7 +32,7 @@ const EditarFotoPerfil: React.FC = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchCamera(options, response => {
+    ImagePicker.launchCamera(options, (response: ImagePickerResponse) => {
       if (response.didCancel) {
         return;
       }
@@ -47,7 +47,6 @@ const EditarFotoPerfil: React.FC = () => {
   const handleCancel = () => {
     setSelectedImage(null);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
