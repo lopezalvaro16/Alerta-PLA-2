@@ -16,7 +16,7 @@ import HomeScreen from './app/screens/home-screen';
 import RegisterScreen from './app/screens/register-screen';
 import Splash from './app/screens/splash-screen';
 import YourDrawerScreen from './app/screens/your-drawer-screen';
-import AlertDetail from './app/screens/AlertDetail';
+import AlertDetail from './app/screens/alert-detail';
 import Main from './app/screens/main-screen';
 import EditarFotoPerfil from './app/screens/editar-foto-perfil';
 
@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
       <StatusBar hidden barStyle="light-content" />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName={'Home'}
           screenOptions={{
             headerStyle: {
               backgroundColor: '#21233d',

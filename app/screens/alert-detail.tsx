@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert,
   Dimensions,
+  PermissionsAndroid,
 } from 'react-native';
 // import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -35,9 +36,10 @@ const AlertDetail: React.FC<AlertDetailProps> = () => {
   const alertType = routeParams?.alertType || 'N/A';
   const alertImage = routeParams?.alertImage;
 
-  const [location, setLocation] = useState<Geolocation.GeoPosition | null>(
-    null,
-  );
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const [address, setAddress] = useState<Address | null>(null);
   const [showSentMessage, setShowSentMessage] = useState(false);
 
@@ -47,8 +49,8 @@ const AlertDetail: React.FC<AlertDetailProps> = () => {
 
   const handleSendLocationPress = async () => {
     const locationBody = {
-      latitude: location?.coords.latitude,
-      longitude: location?.coords.longitude,
+      latitude: location?.latitude,
+      longitude: location?.longitude,
       userId: 2,
       alertTypeId: 1,
     };
@@ -108,22 +110,42 @@ const AlertDetail: React.FC<AlertDetailProps> = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const requestCameraPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Acceso a geolocalización',
+            message:
+              'Alerta-PLA App necesita acceder a tu localización para acudir a en tu ayuda',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          fetchLocation();
+          console.log('You can use the camera');
+        } else {
+          console.log('Camera permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    const fetchLocation = async () => {
       Geolocation.getCurrentPosition(
-        (position: Geolocation.GeoPosition) => {
-          setLocation(position);
+        (position: {coords: {latitude: number; longitude: number}}) => {
+          setLocation(position.coords);
           getAddressFromCoordinates(
             position.coords.latitude,
             position.coords.longitude,
           );
         },
-        (error: Geolocation.GeoError) =>
-          console.error('Error getting location:', error),
+        (error: object) => console.error('Error getting location:', error),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
       );
     };
-
-    fetchData();
+    requestCameraPermission();
   }, []);
 
   const handleBackPress = () => {

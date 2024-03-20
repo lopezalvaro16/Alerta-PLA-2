@@ -1,10 +1,10 @@
-import React from 'react';
+import auth from '@react-native-firebase/auth';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  // Image,
   Dimensions,
 } from 'react-native';
 
@@ -17,6 +17,16 @@ interface HomeScreenProps {
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(authUser => {
+      if (authUser) {
+        navigation.navigate('YourDrawerScreen');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigation]);
+
   const handleLogin = () => {
     navigation.navigate('Login');
   };

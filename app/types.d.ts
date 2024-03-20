@@ -14,3 +14,15 @@ export interface RootStackParamList {
     alertImage: ImageType;
   };
 }
+
+export interface AuthContextState {
+  user: FirebaseAuthTypes.User | null;
+  logInUser: (
+    email: string,
+    password: string,
+  ) => Promise<FirebaseAuthTypes.UserCredential>;
+  singUpUser: (
+    email: string,
+    password: string,
+  ) => Promise<FirebaseAuthTypes.UserCredential>;
+}

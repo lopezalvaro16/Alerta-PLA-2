@@ -10,11 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-// import appFirebase from '../config/firebase-config';
-// import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
-
-// const auth = getAuth(appFirebase);
+import {useAuth} from '../context/auth/auth-context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -28,11 +24,11 @@ const LoginScreen = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const {logInUser} = useAuth();
 
   const handleLogin = async () => {
     try {
-      // await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Iniciando sesion', 'Accediendo...');
+      await logInUser(email, password);
       navigation.navigate('Splash');
     } catch (error) {
       console.log(error);

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "62484390306",
+    "project_id": "pladb-b4964",
+    "storage_bucket": "pladb-b4964.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62484390306:android:75124133a647f08d8392fb",
+        "android_client_info": {
+          "package_name": "com.alertapla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62484390306-tdu5kg234mivm8mb4eifspg3kqpbhqub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwCaUxiacJ90l-NcteiRwbo3JeinjAgfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62484390306-tdu5kg234mivm8mb4eifspg3kqpbhqub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
