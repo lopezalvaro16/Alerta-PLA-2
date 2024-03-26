@@ -2,12 +2,12 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 
-const Splash: React.FC = () => {
+const Splash = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('YourDrawerScreen' as never);
+      navigation.navigate('YourDrawerScreen');
     }, 1000);
   }, [navigation]);
 

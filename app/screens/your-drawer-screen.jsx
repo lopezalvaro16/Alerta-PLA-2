@@ -16,17 +16,7 @@ import ProfileScreen from './profile-screen';
 import MovimientosScreen from './movements-screen';
 import UserSettingsScreen from './config-screen';
 
-// import UserSettingsScreen from './Config';
-
-// import MovimientosScreen from './Movements';
-// import ProfileScreen from './Profile';
-
-interface MenuItem {
-  icon: any;
-  title: string;
-}
-
-const menus: MenuItem[] = [
+const menus = [
   {icon: require('../assets/ui-icons/siren.png'), title: 'Alertas'},
   {icon: require('../assets/ui-icons/usuario.png'), title: 'Perfil'},
   {icon: require('../assets/ui-icons/flecha.png'), title: 'Movimientos'},
@@ -37,7 +27,7 @@ const menus: MenuItem[] = [
   {icon: require('../assets/ui-icons/cerrar-sesion.png'), title: 'Salir'},
 ];
 
-const YourDrawerScreen: React.FC = () => {
+const YourDrawerScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const moveToRight = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(showMenu ? 0.7 : 1)).current;
@@ -56,7 +46,7 @@ const YourDrawerScreen: React.FC = () => {
         {
           text: 'Aceptar',
           onPress: () => {
-            navigation.navigate('Home' as never);
+            navigation.navigate('Home');
           },
         },
       ],

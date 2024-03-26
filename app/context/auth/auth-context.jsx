@@ -1,30 +1,30 @@
 import React from 'react';
 import {createContext, useContext, useEffect, useState} from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {AuthContextState} from '../../types';
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-interface Props {
-  children: JSX.Element | JSX.Element[];
-}
+const FIRESTORE_DB = firestore();
+const FIREBASE_AUTH = auth();
 
-const logInUser = (email: string, password: string) =>
+const logInUser = (email, password) =>
   FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
 
-const singUpUser = (email: string, password: string) =>
+const singUpUser = (email, password) =>
   FIREBASE_AUTH.createUserWithEmailAndPassword(email, password);
 
-const INITIAL_STATE: AuthContextState = {
+const INITIAL_STATE = {
   user: null,
+  FIREBASE_AUTH: null,
+  FIRESTORE_DB: null,
   logInUser,
   singUpUser,
 };
 
 const AuthContext = createContext(INITIAL_STATE);
 
-const FIREBASE_AUTH = auth();
-
-export const AuthProvider = ({children}: Props) => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+export const AuthProvider = ({children}) => {
+  const [user, setUser] = useState(null);
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged(authUser => {
       console.log('🚀 ~ unsubscribe ~ authUser:', authUser);
@@ -39,7 +39,8 @@ export const AuthProvider = ({children}: Props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{user, logInUser, singUpUser}}>
+    <AuthContext.Provider
+      value={{user, logInUser, singUpUser, FIRESTORE_DB, FIREBASE_AUTH}}>
       {children}
     </AuthContext.Provider>
   );

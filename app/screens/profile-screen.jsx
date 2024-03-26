@@ -14,32 +14,19 @@ import logo from '../assets/ui-icons/usuario.png';
 
 const {width, height} = Dimensions.get('window');
 
-interface ProfileInfo {
-  label: string;
-  value: string;
-}
-
-const ProfileScreen: React.FC = () => {
+const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const handleEditarFoto = () => {
     navigation.navigate('EditarFotoPerfil');
   };
 
-  const [profileData, setProfileData] = useState<{
-    profileInfo?: ProfileInfo[];
-    emergencyContactInfo?: ProfileInfo[];
-  } | null>(null);
+  const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: {
-          ProfileScreen: {
-            profileInfo?: ProfileInfo[];
-            emergencyContactInfo?: ProfileInfo[];
-          };
-        } = require('../profile.json');
+        const data = require('../profile.json');
         console.log('Data loaded:', data);
         setProfileData(data.ProfileScreen);
       } catch (error) {

@@ -14,13 +14,7 @@ import {useAuth} from '../context/auth/auth-context';
 
 const {width, height} = Dimensions.get('window');
 
-const LoginScreen = ({
-  navigation,
-}: {
-  navigation: {
-    navigate: Function;
-  };
-}) => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

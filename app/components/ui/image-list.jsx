@@ -1,9 +1,8 @@
 import {FlatList, StyleSheet} from 'react-native';
 import React from 'react';
 import ImageItem from './image-item';
-import {ImageType} from '../../types';
 
-const ImageList = ({data}: {data: ImageType[]}) => {
+const ImageList = ({data}) => {
   return (
     <FlatList
       data={data}

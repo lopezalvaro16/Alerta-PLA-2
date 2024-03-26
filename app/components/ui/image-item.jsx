@@ -1,12 +1,9 @@
 import React from 'react';
 import {Dimensions, Image, StyleSheet} from 'react-native';
 
-interface Props {
-  source: string;
-}
 const screenWidth = Dimensions.get('window').width;
 
-const ImageItem = ({source}: Props) => {
+const ImageItem = ({source}) => {
   return <Image source={{uri: source}} style={styles.selectedImage} />;
 };
 

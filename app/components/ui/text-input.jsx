@@ -1,13 +1,7 @@
 import {StyleSheet, TextInput} from 'react-native';
 import React from 'react';
 
-interface Props {
-  placeholder: string;
-  value: string;
-  onChangeTextCallback: Function;
-}
-
-const InputText = ({placeholder, value, onChangeTextCallback}: Props) => {
+const InputText = ({placeholder, value, onChangeTextCallback}) => {
   return (
     <TextInput
       style={styles.input}

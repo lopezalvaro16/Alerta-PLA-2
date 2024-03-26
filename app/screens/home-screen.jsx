@@ -8,15 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-// import logo from '../assets/icon.jpg';
-
-interface HomeScreenProps {
-  navigation: {
-    navigate: (screen: string) => void;
-  };
-}
-
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const HomeScreen = ({navigation}) => {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(authUser => {
       if (authUser) {

@@ -11,7 +11,6 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {ImageType} from '../types';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ImageList from '../components/ui/image-list';
 import Title from '../components/ui/title';
@@ -26,7 +25,7 @@ const screenWidth = Dimensions.get('window').width;
 
 const AlertAddDetails = () => {
   const [description, setDescription] = useState('');
-  const [selectedImages, setSelectedImages] = useState<ImageType[]>([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const navigation = useNavigation();
 
   const options = {
@@ -38,36 +37,30 @@ const AlertAddDetails = () => {
   };
   const openImage = async () => {
     if (selectedImages.length < 3) {
-      const result = (await launchImageLibrary(options as any)) as {
-        assets: ImageType[];
-        didCancel: boolean;
-      };
+      const result = await launchImageLibrary(options);
       if (!result.didCancel) {
-        setSelectedImages(
-          prevImages =>
-            [...prevImages, {uri: result.assets[0].uri}] as ImageType[],
-        );
+        setSelectedImages(prevImages => [
+          ...prevImages,
+          {uri: result.assets[0].uri},
+        ]);
       }
     }
   };
 
   const openCamera = async () => {
     if (selectedImages.length < 3) {
-      const result = (await launchCamera(options as any)) as {
-        assets: ImageType[];
-        didCancel: boolean;
-      };
+      const result = await launchCamera(options);
       if (!result.didCancel) {
-        setSelectedImages(
-          prevImages =>
-            [...prevImages, {uri: result.assets[0].uri}] as ImageType[],
-        );
+        setSelectedImages(prevImages => [
+          ...prevImages,
+          {uri: result.assets[0].uri},
+        ]);
       }
     }
   };
 
   const handleAddDetails = () => {
-    navigation.navigate('AlertDetails' as never);
+    navigation.navigate('AlertDetails');
     setDescription('');
     setSelectedImages([]);
   };

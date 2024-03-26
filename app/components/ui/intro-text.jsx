@@ -1,7 +1,7 @@
 import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 
-const IntroText = ({content}: {content: string}) => {
+const IntroText = ({content}) => {
   return <Text style={styles.introText}>{content}</Text>;
 };
 

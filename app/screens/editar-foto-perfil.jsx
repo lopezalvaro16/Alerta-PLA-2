@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ImagePicker, {ImagePickerResponse} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 
 import logo from '../assets/ui-icons/usuario.png';
 
-const EditarFotoPerfil: React.FC = () => {
-  const [selectedImage, setSelectedImage] = useState<{localUri: string} | null>(
-    null,
-  );
+const EditarFotoPerfil = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const openImage = async () => {
     const options = {
@@ -17,7 +22,7 @@ const EditarFotoPerfil: React.FC = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchImageLibrary(options, (response: ImagePickerResponse) => {
+    ImagePicker.launchImageLibrary(options, response => {
       if (response.didCancel) {
         return;
       }
@@ -32,7 +37,7 @@ const EditarFotoPerfil: React.FC = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchCamera(options, (response: ImagePickerResponse) => {
+    ImagePicker.launchCamera(options, response => {
       if (response.didCancel) {
         return;
       }
@@ -41,7 +46,7 @@ const EditarFotoPerfil: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    alert('Imagen confirmada y guardada correctamente');
+    Alert.alert('Imagen confirmada y guardada correctamente');
   };
 
   const handleCancel = () => {

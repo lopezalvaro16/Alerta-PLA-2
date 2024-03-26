@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 
-export default function Title({content}: {content: string}) {
+export default function Title({content}) {
   return <Text style={styles.title}>{content}</Text>;
 }
 

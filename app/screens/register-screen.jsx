@@ -10,30 +10,18 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// Importa los tipos necesarios de Firebase para Auth
-// import { getAuth, createUserWithEmailAndPassword, Auth } from 'firebase/auth';
-// import { appFirebase } from '../config/firebase-config';
-// const auth: Auth = getAuth(appFirebase);
 
-interface Errors {
-  email?: string;
-  password?: string;
-  repeatPassword?: string;
-}
+const RegisterScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  const repeatPasswordInputRef = useRef(null);
 
-const RegisterScreen: React.FC<{navigation: {navigate: Function}}> = ({
-  navigation,
-}) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [repeatPassword, setRepeatPassword] = useState<string>('');
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errors, setErrors] = useState<Errors>({});
-  const emailInputRef = useRef<TextInput>(null);
-  const passwordInputRef = useRef<TextInput>(null);
-  const repeatPasswordInputRef = useRef<TextInput>(null);
-
-  const validateEmail = (text: string) => {
+  const validateEmail = text => {
     setEmail(text);
     setErrors(prevErrors => ({
       ...prevErrors,
@@ -45,7 +33,7 @@ const RegisterScreen: React.FC<{navigation: {navigate: Function}}> = ({
     }));
   };
 
-  const validateRepeatPassword = (text: string) => {
+  const validateRepeatPassword = text => {
     setRepeatPassword(text);
     setErrors(prevErrors => ({
       ...prevErrors,

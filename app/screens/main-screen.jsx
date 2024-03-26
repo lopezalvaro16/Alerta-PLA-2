@@ -13,20 +13,18 @@ import alertaRobo from '../assets/alerts/AlertaRobo.png';
 import alertaWoman from '../assets/alerts/alertaDeGenero.png';
 import alertaGeneral from '../assets/alerts/alertaGeneral2.png';
 import alertaVial from '../assets/alerts/alertaVial2.png';
+import {useAlert} from '../context/AlertContext';
 
-interface MainProps {}
-
-const Main: React.FC<MainProps> = () => {
+const Main = () => {
   const navigation = useNavigation();
+  const {buildAlert} = useAlert();
 
-  const handleAlertDetail = (alertType: string, alertImage: any) => {
+  const handleAlertDetail = (alertType, alertImage) => {
     const currentDate = new Date().toISOString();
+    buildAlert({date: currentDate, alertType, alertImage});
     navigation.navigate({
-      date: currentDate,
-      alertType,
-      alertImage,
-      routName: 'AlertConfirm',
-    } as never);
+      name: 'AlertConfirm',
+    });
   };
 
   return (
@@ -94,6 +92,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: width * 0.05,
     borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   alertVial: {
     flex: 1,
@@ -103,6 +108,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: width * 0.05,
     borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   alertGenero: {
     flex: 1,
@@ -112,6 +124,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: width * 0.05,
     borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   alertOtros: {
     flex: 1,
@@ -121,6 +140,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: width * 0.05,
     borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   centeredView: {
     flex: 1,
