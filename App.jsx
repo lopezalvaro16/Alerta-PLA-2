@@ -15,6 +15,7 @@ import EditarFotoPerfil from './app/screens/editar-foto-perfil.jsx';
 import {AuthProvider} from './app/context/auth/auth-context.jsx';
 import {AlertProvider} from './app/context/AlertContext.jsx';
 import {SocketProvider} from './app/context/SocketContext.jsx';
+import TipsView from './app/screens/tips-alert-screen.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -81,6 +82,11 @@ function App() {
                   name="EditarFotoPerfil"
                   options={{headerShown: false}}
                   component={EditarFotoPerfil}
+                />
+                <Stack.Screen
+                  name="TipsAlert"
+                  component={TipsView}
+                  options={{title: ''}}
                 />
               </Stack.Navigator>
             </NavigationContainer>

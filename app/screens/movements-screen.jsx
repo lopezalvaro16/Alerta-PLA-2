@@ -101,7 +101,7 @@ const MovimientosScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <TouchableOpacity style={styles.closeButton} onPress={handleExit}>
-              <Icon name="close" size={20} color="black" />
+              <Icon name="close" size={20} color="gray" />
             </TouchableOpacity>
             <View style={styles.contentContenidoModal}>
               <Text style={styles.modalTitle}>Detalles del Movimiento</Text>
@@ -160,9 +160,18 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: 'row',
     margin: 10,
+    padding: 5,
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
     backgroundColor: 'white',
+    borderRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   tableHeader: {
     flex: 1,
@@ -185,12 +194,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#CcdcEC',
     padding: 30,
     borderRadius: 10,
     alignItems: 'center',
     maxHeight: '50%',
     minWidth: '90%',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   modalTitle: {
     fontSize: 18,
@@ -222,16 +238,23 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginTop: 20,
-    backgroundColor: '#725599',
+    backgroundColor: '#aaaccc',
     padding: 10,
     borderRadius: 10,
+    borderBottomWidth: 1,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   contentContenidoModal: {
     borderColor: 'black',
     borderRadius: 15,
     borderWidth: 1,
-    // backgroundColor: "#fffcdc",
-    backgroundColor: '#715899',
+    backgroundColor: '#aaaccc',
     padding: 15,
   },
 });

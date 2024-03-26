@@ -1,0 +1,44 @@
+{
+  "alertas": {
+    "robo": {
+      "titulo": "Alerta de Robo",
+      "recomendaciones": [
+        "Observa detalles del ladrón.",
+        "Prioriza tu seguridad.",
+        "Mantén la calma y respira profundamente.",
+        "Preserva la escena y no toques nada.",
+        "Colabora con las autoridades al ser claro y preciso.",
+        "En minutos un operador se comunicará contigo."
+      ]
+    },
+    "vial": {
+      "titulo": "Alerta Vial",
+      "recomendaciones": [
+        "Mantén la calma y evalúa riesgos.",
+        "Asegura tu seguridad.",
+        "Llama a emergencias 107 Y 911, proporciona información precisa.",
+        "No muevas a los heridos a menos que haya peligro inminente.",
+        "Resguarda la escena y espera la llegada de las autoridades.",
+        "En minutos un operador se comunicará contigo."
+      ]
+    },
+    "violencia_genero": {
+      "titulo": "Violencia de Genero",
+      "recomendaciones": [
+        "Prioriza tu seguridad y busca un lugar seguro.",
+        "Guarda evidencias si es seguro hacerlo.",
+        "Busca apoyo llamando a amigos, familiares o personas de confianza.",
+        "Llama al 911 y brinda detalles claros.",
+        "En minutos un operador se comunicará contigo."
+      ]
+    },
+    "general": {
+      "titulo": "Otras Alertas",
+      "recomendaciones": [
+        "Evalúa la situación y busca ayuda según sea necesario.",
+        "Mantén la calma y sigue protocolos de seguridad.",
+        "Informa a las autoridades y personas de confianza."
+      ]
+    }
+  }
+}

@@ -167,6 +167,7 @@ const AlertDetail = () => {
     // } else {
     //   console.error('El usuario no está autenticado');
     // }
+    showSuccessAlert();
     console.log('HANDLE SEND LOCATION');
   };
 
@@ -365,6 +366,20 @@ const styles = StyleSheet.create({
     padding: width * 0.03,
     borderRadius: width * 0.01,
     alignItems: 'center',
+  },
+  confirmButtonTextDisabled: {
+    color: 'white',
+    fontSize: width * 0.04,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: width * 0.02,
+  },
+  confirmButtonDisabled: {
+    backgroundColor: '#b3b3b3',
+    padding: width * 0.04,
+    borderRadius: width * 0.02,
+    width: '90%',
+    opacity: 0.7,
   },
 });
 
