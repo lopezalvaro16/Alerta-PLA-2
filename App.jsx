@@ -80,7 +80,7 @@ function App() {
                 />
                 <Stack.Screen
                   name="EditarFotoPerfil"
-                  options={{headerShown: false}}
+                  options={{title: ''}}
                   component={EditarFotoPerfil}
                 />
                 <Stack.Screen
