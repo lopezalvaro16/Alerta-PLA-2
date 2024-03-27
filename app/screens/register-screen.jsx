@@ -98,7 +98,7 @@ const RegisterScreen = ({navigation}) => {
               <TextInput
                 ref={nombreInputRef}
                 style={[styles.input, {color: 'white'}]}
-                placeholder="Juan Jose"
+                placeholder="Ingrese su nombre"
                 value={nombre}
                 placeholderTextColor="#ccc"
                 onChangeText={setNombre}
@@ -115,7 +115,7 @@ const RegisterScreen = ({navigation}) => {
               <TextInput
                 ref={apellidoInputRef}
                 style={[styles.input, {color: 'white'}]}
-                placeholder="Lopez"
+                placeholder="Ingrese su apellido"
                 value={apellido}
                 placeholderTextColor="#ccc"
                 onChangeText={setApellido}
@@ -149,7 +149,7 @@ const RegisterScreen = ({navigation}) => {
               <TextInput
                 ref={emailInputRef}
                 style={[styles.input, {color: 'white'}]}
-                placeholder="Lopez"
+                placeholder="email@email.com"
                 value={email}
                 placeholderTextColor="#ccc"
                 onChangeText={validateEmail}
