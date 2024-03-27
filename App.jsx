@@ -16,6 +16,7 @@ import {AuthProvider} from './app/context/auth/auth-context.jsx';
 import {AlertProvider} from './app/context/AlertContext.jsx';
 import {SocketProvider} from './app/context/SocketContext.jsx';
 import TipsView from './app/screens/tips-alert-screen.jsx';
+import MailValidation from './app/screens/mail-validation.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,11 @@ function App() {
                 <Stack.Screen
                   name="TipsAlert"
                   component={TipsView}
+                  options={{title: ''}}
+                />
+                <Stack.Screen
+                  name="MailValidation"
+                  component={MailValidation}
                   options={{title: ''}}
                 />
               </Stack.Navigator>
