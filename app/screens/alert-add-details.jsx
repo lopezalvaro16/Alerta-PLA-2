@@ -1,7 +1,7 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,18 +10,14 @@ import {
   Dimensions,
   ScrollView,
   Image,
+  TextInput,
+  FlatList,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ImageList from '../components/ui/image-list';
-import Title from '../components/ui/title';
-import IntroText from '../components/ui/intro-text';
-import {uiText} from '../constants/ui.constans';
-import InputText from '../components/ui/text-input';
-import Label from '../components/ui/label';
 
 const logo = require('../assets/ui-icons/anadir-foto.png');
 
-const screenWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const AlertAddDetails = () => {
   const [description, setDescription] = useState('');
@@ -38,7 +34,12 @@ const AlertAddDetails = () => {
   const openImage = async () => {
     if (selectedImages.length < 3) {
       const result = await launchImageLibrary(options);
-      if (!result.didCancel) {
+      if (
+        !result.didCancel &&
+        result.assets &&
+        result.assets.length > 0 &&
+        result.assets[0].uri
+      ) {
         setSelectedImages(prevImages => [
           ...prevImages,
           {uri: result.assets[0].uri},
@@ -50,7 +51,12 @@ const AlertAddDetails = () => {
   const openCamera = async () => {
     if (selectedImages.length < 3) {
       const result = await launchCamera(options);
-      if (!result.didCancel) {
+      if (
+        !result.didCancel &&
+        result.assets &&
+        result.assets.length > 0 &&
+        result.assets[0].uri
+      ) {
         setSelectedImages(prevImages => [
           ...prevImages,
           {uri: result.assets[0].uri},
@@ -66,99 +72,135 @@ const AlertAddDetails = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Title content={uiText.AddAlertDetails.title1} />
-        <IntroText content={uiText.AddAlertDetails.textIntro} />
-        <Label content={uiText.AddAlertDetails.label} />
-        <InputText
-          placeholder={uiText.AddAlertDetails.placeholder}
-          value={description}
-          onChangeTextCallback={setDescription}
+    <View style={styles.container}>
+      <Text style={styles.title}>Importante</Text>
+      <Text style={styles.introText}>
+        Esta información es crucial para la P.L.A y contribuirá
+        significativamente a mejorar la eficacia de las respuestas de
+        emergencia, garantizando un entorno más seguro para todos.
+      </Text>
+      <Text style={styles.title}>Detalles de la Alerta</Text>
+      <TextInput
+        style={[styles.input, {height: windowHeight * 0.1}]}
+        placeholder="Descripción opcional"
+        value={description}
+        multiline
+        numberOfLines={4}
+        onChangeText={text => setDescription(text)}
+      />
+      <Text style={styles.titleCamera}>
+        Agrega fotos (máximo {3 - selectedImages.length})
+      </Text>
+      <View style={styles.imageContainer}>
+        <FlatList
+          data={selectedImages}
+          horizontal
+          contentContainerStyle={styles.imageList}
+          renderItem={({item}) => (
+            <Image source={{uri: item.uri}} style={styles.selectedImage} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
         />
-        <Text style={styles.titleCamera}>
-          Agrega fotos (máximo {3 - selectedImages.length})
-        </Text>
-        <View style={styles.imageContainer}>
-          <ImageList data={selectedImages} />
-          {[...Array(3 - selectedImages.length)].map((_, index) => (
-            <Image key={index} source={logo} />
-          ))}
-        </View>
 
-        <View style={styles.imageButtonsContainer}>
-          <TouchableOpacity
-            style={styles.cameraButton}
-            onPress={openImage}
-            disabled={selectedImages.length >= 3}>
-            <Icon name="image-search" size={30} color="white" />
-            <Text style={styles.imageButtonText}>Galería</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cameraButton}
-            onPress={openCamera}
-            disabled={selectedImages.length >= 3}>
-            <Icon name="camera" size={30} color="white" />
-            <Text style={styles.imageButtonText}>Foto</Text>
-          </TouchableOpacity>
-        </View>
+        {[...Array(3 - selectedImages.length)].map((_, index) => (
+          <Image key={index} source={logo} style={styles.selectedImage} />
+        ))}
+      </View>
+
+      <View style={styles.imageButtonsContainer}>
         <TouchableOpacity
-          style={styles.submitButton}
-          onPress={handleAddDetails}>
-          <Text style={styles.buttonText}>Guardar Alerta</Text>
+          style={styles.cameraButton}
+          onPress={openImage}
+          disabled={selectedImages.length >= 3}>
+          <Icon name="image-search" size={30} color="white" />
+          <Text style={styles.imageButtonText}>Galería</Text>
         </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+        <TouchableOpacity
+          style={styles.cameraButton}
+          onPress={openCamera}
+          disabled={selectedImages.length >= 3}>
+          <Icon name="camera" size={30} color="white" />
+          <Text style={styles.imageButtonText}>Foto</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.submitButton} onPress={handleAddDetails}>
+        <Text style={styles.buttonText}>Enviar detalles</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-  },
   container: {
-    flexGrow: 1,
-    padding: '4%',
-    justifyContent: 'space-around',
+    flex: 1,
+    padding: windowWidth * 0.05,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: windowHeight * 0.02,
+  },
+  introText: {
+    fontSize: 16,
+    marginBottom: windowHeight * 0.02,
+    textAlign: 'justify',
+  },
+  input: {
+    height: windowHeight * 0.06,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: windowHeight * 0.02,
+    padding: windowWidth * 0.02,
+  },
+  titleCamera: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: windowHeight * 0.01,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: windowHeight * 0.02,
+  },
+  imageList: {
+    justifyContent: 'center',
+  },
+  selectedImage: {
+    width: windowWidth * 0.25,
+    height: windowWidth * 0.25,
+    resizeMode: 'cover',
+    borderRadius: 10,
+    marginHorizontal: windowWidth * 0.02,
+    marginTop: windowWidth * 0.04,
+    marginBottom: windowWidth * 0.05,
   },
   imageButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: '4%',
+    marginBottom: windowHeight * 0.05,
+  },
+  cameraButton: {
+    width: windowWidth * 0.27,
+    height: windowWidth * 0.27,
+    borderRadius: windowWidth * 0.15,
+    backgroundColor: '#725599',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   imageButtonText: {
     color: 'white',
-    marginTop: '2%',
+    marginTop: windowHeight * 0.01,
   },
   submitButton: {
     backgroundColor: '#725599',
-    padding: '5%',
+    padding: windowHeight * 0.02,
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    alignItems: 'center',
-  },
-  titleCamera: {
-    textAlign: 'center',
-    fontSize: screenWidth * 0.06,
-    fontWeight: 'bold',
-    marginBottom: '2%',
-  },
-  cameraButton: {
-    width: screenWidth * 0.25,
-    height: screenWidth * 0.25,
-    borderRadius: screenWidth * 0.15,
-    backgroundColor: '#725599',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: '7%',
   },
 });
 

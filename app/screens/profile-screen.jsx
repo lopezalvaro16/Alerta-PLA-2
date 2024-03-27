@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import logo from '../assets/ui-icons/usuario.png';
+import {useAuth} from '../context/auth/auth-context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,17 +24,28 @@ const ProfileScreen = () => {
 
   const [profileData, setProfileData] = useState(null);
 
+  const {FIREBASE_AUTH} = useAuth();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = require('../profile.json');
-        console.log('Data loaded:', data);
-        setProfileData(data.ProfileScreen);
+        const currentUser = FIREBASE_AUTH.currentUser;
+        const displayName = currentUser.displayName;
+        const phoneNumber = currentUser.phoneNumber;
+        const photoURL = currentUser.photoURL;
+        const dniUser = currentUser.dniUser;
+        setProfileData({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: displayName || 'No verificado',
+          photoURL: photoURL,
+          phoneNumber: phoneNumber || 'XXX XXX',
+          dniUser: dniUser || '12345678',
+        });
       } catch (error) {
         console.error('Error al cargar datos:', error.message, error.stack);
       }
     };
-
     fetchData();
   }, []);
 
@@ -46,7 +58,16 @@ const ProfileScreen = () => {
       <View style={styles.body}>
         <View style={styles.profileContainer}>
           <View style={styles.profilePicture}>
-            <Image source={logo} style={styles.profileImage} />
+            <Image
+              style={styles.profileImage}
+              source={
+                profileData?.photoURL
+                  ? {
+                      uri: profileData?.photoURL,
+                    }
+                  : require('../assets/ui-icons/usuario.png')
+              }
+            />
           </View>
           <TouchableOpacity onPress={handleEditarFoto}>
             <Icon
@@ -62,24 +83,55 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <View style={styles.profileInfoContainer}>
-            {profileData.profileInfo?.map(({label, value}, index) => (
-              <React.Fragment key={index}>
-                <Text style={styles.profileInfoLabel}>{label}:</Text>
-                <Text style={styles.profileInfo}>{value}</Text>
-              </React.Fragment>
-            ))}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>Nombre del Usuario:</Text>
+                <Text style={styles.profileInfo}>
+                  {profileData.displayName}
+                </Text>
+              </>
+            )}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>Numero Cel:</Text>
+                <Text style={styles.profileInfo}>
+                  {profileData.phoneNumber}
+                </Text>
+              </>
+            )}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>DNI</Text>
+                <Text style={styles.profileInfo}>{profileData.dniUser}</Text>
+              </>
+            )}
           </View>
         </View>
-
         <View style={styles.profileContainer}>
-          <Text style={styles.info}>CONTACTO DE EMERGENCIA</Text>
+          <Text style={styles.info}>DATOS ADICIONALES</Text>
           <View style={styles.profileInfoContainer}>
-            {profileData.emergencyContactInfo?.map(({label, value}, index) => (
-              <React.Fragment key={index}>
-                <Text style={styles.profileInfoLabel}>{label}:</Text>
-                <Text style={styles.profileInfo}>{value}</Text>
-              </React.Fragment>
-            ))}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>Email:</Text>
+                <Text style={styles.profileInfo}>{profileData.email}</Text>
+              </>
+            )}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>Nombre:</Text>
+                <Text style={styles.profileInfo}>
+                  {profileData.displayName}
+                </Text>
+              </>
+            )}
+            {profileData.displayName && (
+              <>
+                <Text style={styles.profileInfoLabel}>Nombre:</Text>
+                <Text style={styles.profileInfo}>
+                  {profileData.displayName}
+                </Text>
+              </>
+            )}
           </View>
         </View>
       </View>

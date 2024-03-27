@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -28,116 +29,135 @@ const UserSettingsScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Nombre:</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={firstName}
-          onChangeText={text => setFirstName(text)}
-          placeholder="Nombre"
-          editable={isEditingFirstName}
-        />
-        {isEditingFirstName ? (
-          <TouchableOpacity
-            onPress={handleSaveChanges}
-            style={styles.editButton}>
-            <Ionicons name="checkmark" size={20} color="#6600ff" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => setIsEditingFirstName(true)}
-            style={styles.editButton}>
-            {/* <Ionicons name="create" size={20} color="#725599" /> */}
-            <Text style={styles.editButton}>Editar</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      <Text style={styles.label}>Apellido:</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={lastName}
-          onChangeText={text => setLastName(text)}
-          placeholder="Apellido"
-          editable={isEditingLastName}
-        />
-        {isEditingLastName ? (
-          <TouchableOpacity
-            onPress={handleSaveChanges}
-            style={styles.editButton}>
-            <Ionicons name="checkmark" size={20} color="#6600ff" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => setIsEditingLastName(true)}
-            style={styles.editButton}>
-            {/* <Ionicons name="create" size={20} color="#725599" /> */}
-            <Text style={styles.editButton}>Editar</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      <Text style={styles.label}>Dirección:</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={adress}
-          onChangeText={text => setAdress(text)}
-          placeholder="Nombre"
-          editable={isEditingAddress}
-        />
-        {isEditingAddress ? (
-          <TouchableOpacity
-            onPress={handleSaveChanges}
-            style={styles.editButton}>
-            <Ionicons name="checkmark" size={20} color="#6600ff" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => setIsEditingAddress(true)}
-            style={styles.editButton}>
-            {/* <Ionicons name="create" size={20} color="#725599" /> */}
-            <Text style={styles.editButton}>Editar</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      <Text style={styles.label}>Correo Electrónico:</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={text => setEmail(text)}
-          placeholder="Nombre"
-          editable={isEditingEmail}
-        />
-        {isEditingEmail ? (
-          <TouchableOpacity
-            onPress={handleSaveChanges}
-            style={styles.editButton}>
-            <Ionicons name="checkmark" size={20} color="#6600ff" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => setIsEditingEmail(true)}
-            style={styles.editButton}>
-            {/* <Ionicons name="create" size={20} color="#725599" /> */}
-            <Text style={styles.editButton}>Editar</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+    <ScrollView contentContainerStyle={styles.containerScroll}>
+      <View style={styles.container}>
+        <Text style={styles.label}>Nombre:</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={firstName}
+            onChangeText={text => setFirstName(text)}
+            placeholder="Nombre"
+            editable={isEditingFirstName}
+          />
+          {isEditingFirstName ? (
+            <TouchableOpacity
+              onPress={handleSaveChanges}
+              style={styles.editButton}>
+              <Ionicons name="checkmark" size={20} color="#6600ff" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setIsEditingFirstName(true)}
+              style={styles.editButton}>
+              {/* <Ionicons name="create" size={20} color="#725599" /> */}
+              <Text style={styles.editButton}>Editar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <Text style={styles.label}>Apellido:</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={lastName}
+            onChangeText={text => setLastName(text)}
+            placeholder="Apellido"
+            editable={isEditingLastName}
+          />
+          {isEditingLastName ? (
+            <TouchableOpacity
+              onPress={handleSaveChanges}
+              style={styles.editButton}>
+              <Ionicons name="checkmark" size={20} color="#6600ff" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setIsEditingLastName(true)}
+              style={styles.editButton}>
+              {/* <Ionicons name="create" size={20} color="#725599" /> */}
+              <Text style={styles.editButton}>Editar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <Text style={styles.label}>Dirección:</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={adress}
+            onChangeText={text => setAdress(text)}
+            placeholder="Nombre"
+            editable={isEditingAddress}
+          />
+          {isEditingAddress ? (
+            <TouchableOpacity
+              onPress={handleSaveChanges}
+              style={styles.editButton}>
+              <Ionicons name="checkmark" size={20} color="#6600ff" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setIsEditingAddress(true)}
+              style={styles.editButton}>
+              {/* <Ionicons name="create" size={20} color="#725599" /> */}
+              <Text style={styles.editButton}>Editar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <Text style={styles.label}>Correo Electrónico:</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={text => setEmail(text)}
+            placeholder="Nombre"
+            editable={isEditingEmail}
+          />
+          {isEditingEmail ? (
+            <TouchableOpacity
+              onPress={handleSaveChanges}
+              style={styles.editButton}>
+              <Ionicons name="checkmark" size={20} color="#6600ff" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setIsEditingEmail(true)}
+              style={styles.editButton}>
+              {/* <Ionicons name="create" size={20} color="#725599" /> */}
+              <Text style={styles.editButton}>Editar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
-      <TouchableOpacity onPress={handleSaveChanges} style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Guardar Cambios</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleSaveChanges} style={styles.saveButton}>
+          <Text style={styles.saveButtonText}>Guardar Cambios</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  containerScroll: {
+    flex: 1,
+    backgroundColor: '#CcdcEC',
+  },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#CcdcEC',
+    overflow: 'hidden',
+    height: '100%',
+    backgroundColor: '#f0f0f0',
+    margin: 25,
+    padding: 30,
+    shadowColor: '#000',
+    borderRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 7,
   },
   heading: {
     fontSize: 24,
