@@ -144,8 +144,8 @@ const AlertDetail = () => {
     if (user) {
       setLoadingAlert(true);
       const locationBody = {
-        latitude: location?.coords.latitude,
-        longitude: location?.coords.longitude,
+        latitude: location?.latitude,
+        longitude: location?.longitude,
         userId: user.uid,
         alertType,
         status: 'pending',
@@ -154,18 +154,15 @@ const AlertDetail = () => {
         date: formattedDate,
         color,
       };
+      console.log('🚀 ~ handleSendLocationPress ~ locationBody:', locationBody);
       try {
         await FIRESTORE_DB.collection('alerts').add(locationBody);
         emit('create alert', locationBody);
-        // setShowSentMessage(true);
         showSuccessAlert();
       } catch (error) {
         console.log(' ~ handleSendLocationPress ~ error:', error.message);
       } finally {
         setLoadingAlert(false);
-        setTimeout(() => {
-          // setShowSentMessage(false);
-        }, 1500);
       }
     } else {
       console.error('El usuario no está autenticado');

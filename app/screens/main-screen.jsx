@@ -19,9 +19,9 @@ const Main = () => {
   const navigation = useNavigation();
   const {buildAlert} = useAlert();
 
-  const handleAlertDetail = (alertType, alertImage) => {
+  const handleAlertDetail = (alertType, alertImage, color) => {
     const currentDate = new Date().toISOString();
-    buildAlert({date: currentDate, alertType, alertImage});
+    buildAlert({date: currentDate, alertType, alertImage, color});
     navigation.navigate({
       name: 'AlertConfirm',
     });
@@ -34,7 +34,7 @@ const Main = () => {
           <TouchableOpacity
             style={styles.alertRobo}
             onPress={() => {
-              handleAlertDetail('Alerta de Robo', alertaRobo);
+              handleAlertDetail('Alerta de Robo', alertaRobo, '#ff5500');
             }}>
             <Image source={alertaRobo} style={styles.image} />
             <Text style={styles.textAlert}>Alerta de robo</Text>
@@ -42,7 +42,7 @@ const Main = () => {
           <TouchableOpacity
             style={styles.alertVial}
             onPress={() => {
-              handleAlertDetail('Alerta Vial', alertaVial);
+              handleAlertDetail('Alerta Vial', alertaVial, '#008000');
             }}>
             <Image source={alertaVial} style={styles.image} />
             <Text style={styles.textAlert}>Alerta vial</Text>
@@ -52,7 +52,7 @@ const Main = () => {
           <TouchableOpacity
             style={styles.alertGenero}
             onPress={() => {
-              handleAlertDetail('Violencia de Genero', alertaWoman);
+              handleAlertDetail('Violencia de Genero', alertaWoman, '#800080');
             }}>
             <Image source={alertaWoman} style={styles.image} />
             <Text style={styles.textAlert}>V. de Género</Text>
@@ -60,7 +60,7 @@ const Main = () => {
           <TouchableOpacity
             style={styles.alertOtros}
             onPress={() => {
-              handleAlertDetail('Otras Alertas', alertaGeneral);
+              handleAlertDetail('Otras Alertas', alertaGeneral, '#ccc');
             }}>
             <Image source={alertaGeneral} style={styles.image} />
             <Text style={styles.textAlert}>Otras alertas</Text>
