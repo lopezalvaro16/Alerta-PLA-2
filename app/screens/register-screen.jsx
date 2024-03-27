@@ -13,13 +13,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {FIREBASE_AUTH, FIRESTORE_DB} from '../config/firebase-config';
-import {doc, setDoc} from 'firebase/firestore';
-
-const auth = FIREBASE_AUTH;
+import {useAuth} from '../context/auth/auth-context';
 
 const RegisterScreen = ({navigation}) => {
+  const {singUpUser, FIRESTORE_DB} = useAuth();
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
@@ -70,13 +67,9 @@ const RegisterScreen = ({navigation}) => {
       dni,
     };
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
+      const userCredential = await singUpUser(email, password);
       const uid = userCredential.user.uid;
-      await setDoc(doc(FIRESTORE_DB, 'users', uid), {
+      await FIRESTORE_DB.collection('users').add({
         ...additionalData,
         uid: uid,
         email: email,
