@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import logo from '../assets/ui-icons/usuario.png';
 import {useFirebase} from '../context/firebase-context';
 
 const {width, height} = Dimensions.get('window');
@@ -24,30 +23,33 @@ const ProfileScreen = () => {
 
   const [profileData, setProfileData] = useState(null);
 
-  const {FIREBASE_AUTH} = useFirebase();
+  const {FIREBASE_AUTH, FIRESTORE_DB} = useFirebase();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const currentUser = FIREBASE_AUTH.currentUser;
-        const displayName = currentUser.displayName;
-        const phoneNumber = currentUser.phoneNumber;
-        const photoURL = currentUser.photoURL;
-        const dniUser = currentUser.dniUser;
+        const response = await FIRESTORE_DB.collection('users')
+          .where('uid', '==', currentUser.uid)
+          .get();
+        const userData = response._docs[0]._data;
+        const displayName = `${userData.nombre} ${userData.apellido}`;
+        const phoneNumber = userData.telefono;
+        const photoURL = userData.photoURL;
+        const dniUser = userData.dni;
         setProfileData({
-          uid: currentUser.uid,
           email: currentUser.email,
           displayName: displayName || 'No verificado',
           photoURL: photoURL,
-          phoneNumber: phoneNumber || 'XXX XXX',
-          dniUser: dniUser || '12345678',
+          phoneNumber: phoneNumber || '--- ---',
+          dniUser: dniUser || '--- ---',
         });
       } catch (error) {
         console.error('Error al cargar datos:', error.message, error.stack);
       }
     };
     fetchData();
-  }, []);
+  }, [FIREBASE_AUTH, FIRESTORE_DB]);
 
   if (!profileData) {
     return <Text>Cargando...</Text>;
@@ -74,64 +76,23 @@ const ProfileScreen = () => {
               name="camera"
               size={width * 0.1}
               color="gray"
-              style={{
-                position: 'relative',
-                marginBottom: -height * 0.02,
-                right: -width * 0.42,
-                top: -height * 0.07,
-              }}
+              style={styles.icon}
             />
           </TouchableOpacity>
           <View style={styles.profileInfoContainer}>
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>Nombre del Usuario:</Text>
-                <Text style={styles.profileInfo}>
-                  {profileData.displayName}
-                </Text>
-              </>
-            )}
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>Numero Cel:</Text>
-                <Text style={styles.profileInfo}>
-                  {profileData.phoneNumber}
-                </Text>
-              </>
-            )}
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>DNI</Text>
-                <Text style={styles.profileInfo}>{profileData.dniUser}</Text>
-              </>
-            )}
+            <Text style={styles.profileInfoLabel}>Nombre del Usuario:</Text>
+            <Text style={styles.profileInfo}>{profileData.displayName}</Text>
+            <Text style={styles.profileInfoLabel}>DNI</Text>
+            <Text style={styles.profileInfo}>{profileData.dniUser}</Text>
           </View>
         </View>
         <View style={styles.profileContainer}>
           <Text style={styles.info}>DATOS ADICIONALES</Text>
           <View style={styles.profileInfoContainer}>
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>Email:</Text>
-                <Text style={styles.profileInfo}>{profileData.email}</Text>
-              </>
-            )}
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>Nombre:</Text>
-                <Text style={styles.profileInfo}>
-                  {profileData.displayName}
-                </Text>
-              </>
-            )}
-            {profileData.displayName && (
-              <>
-                <Text style={styles.profileInfoLabel}>Nombre:</Text>
-                <Text style={styles.profileInfo}>
-                  {profileData.displayName}
-                </Text>
-              </>
-            )}
+            <Text style={styles.profileInfoLabel}>Email:</Text>
+            <Text style={styles.profileInfo}>{profileData.email}</Text>
+            <Text style={styles.profileInfoLabel}>Numero Cel:</Text>
+            <Text style={styles.profileInfo}>{profileData.phoneNumber}</Text>
           </View>
         </View>
       </View>
@@ -162,6 +123,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  icon: {
+    position: 'relative',
+    marginBottom: -height * 0.02,
+    right: -width * 0.42,
+    top: -height * 0.07,
   },
   info: {
     fontSize: width * 0.05,
