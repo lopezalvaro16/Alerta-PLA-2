@@ -12,7 +12,7 @@ import YourDrawerScreen from './app/screens/your-drawer-screen.jsx';
 import AlertDetail from './app/screens/alert-detail.jsx';
 import Main from './app/screens/main-screen.jsx';
 import EditarFotoPerfil from './app/screens/editar-foto-perfil.jsx';
-import {AuthProvider} from './app/context/auth/auth-context.jsx';
+import {FirebaseProvider} from './app/context/firebase-context.jsx';
 import {AlertProvider} from './app/context/AlertContext.jsx';
 import {SocketProvider} from './app/context/SocketContext.jsx';
 import TipsView from './app/screens/tips-alert-screen.jsx';
@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
+      <FirebaseProvider>
         <AlertProvider>
           <SocketProvider>
             <StatusBar hidden barStyle="light-content" />
@@ -98,7 +98,7 @@ function App() {
             </NavigationContainer>
           </SocketProvider>
         </AlertProvider>
-      </AuthProvider>
+      </FirebaseProvider>
     </SafeAreaProvider>
   );
 }

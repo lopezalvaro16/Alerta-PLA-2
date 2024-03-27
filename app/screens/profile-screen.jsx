@@ -11,7 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import logo from '../assets/ui-icons/usuario.png';
-import {useAuth} from '../context/auth/auth-context';
+import {useFirebase} from '../context/firebase-context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -24,7 +24,7 @@ const ProfileScreen = () => {
 
   const [profileData, setProfileData] = useState(null);
 
-  const {FIREBASE_AUTH} = useAuth();
+  const {FIREBASE_AUTH} = useFirebase();
 
   useEffect(() => {
     const fetchData = async () => {

@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useAuth} from '../context/auth/auth-context';
+import {useFirebase} from '../context/firebase-context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -18,7 +18,7 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const {logInUser} = useAuth();
+  const {logInUser} = useFirebase();
 
   const handleLogin = async () => {
     try {

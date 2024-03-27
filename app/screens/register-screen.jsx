@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import {useAuth} from '../context/auth/auth-context';
+import {useFirebase} from '../context/firebase-context';
 
 const RegisterScreen = ({navigation}) => {
-  const {singUpUser, FIRESTORE_DB} = useAuth();
+  const {singUpUser, FIRESTORE_DB} = useFirebase();
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');

@@ -16,17 +16,20 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {FIREBASE_AUTH, FIRESTORE_DB} from '../config/firebase-config';
 import {useAlert} from '../context/AlertContext';
 import {useSocket} from '../context/SocketContext';
-// import {useSocket} from '../context/SocketContext';
+import {useFirebase} from '../context/firebase-context';
+import {GOOGLE_API_KEY} from '../constants/api-constans';
 
-Geocoder.init('AIzaSyB75mbYbTcPrhld_q42k1zA_HUEGiaircU');
+Geocoder.init(GOOGLE_API_KEY);
 
 const AlertDetail = () => {
   const navigation = useNavigation();
   const {alert} = useAlert();
   const {emit} = useSocket();
+
+  const {FIRESTORE_DB, FIREBASE_AUTH} = useFirebase();
+
   const alertType = alert?.alertType || 'N/A';
   const alertImage = alert?.alertImage;
   const date = alert?.date;
@@ -65,6 +68,7 @@ const AlertDetail = () => {
     };
     fetchGeoLocationPermissons();
   }, []);
+
   const fetchLocation = async () => {
     Geolocation.getCurrentPosition(
       position => {
@@ -78,7 +82,6 @@ const AlertDetail = () => {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
-
   const getAddressFromCoordinates = async (latitude, longitude) => {
     try {
       const addressResponse = await Geocoder.from({
@@ -126,47 +129,47 @@ const AlertDetail = () => {
   };
 
   const handleSendLocationPress = async () => {
-    // const user = FIREBASE_AUTH.currentUser;
-    // const newDate = new Date();
-    // const hour = newDate.toLocaleTimeString('es-AR', {
-    //   hour: 'numeric',
-    //   minute: 'numeric',
-    //   hour12: true,
-    // });
-    // const formattedDate = newDate.toLocaleDateString('es-AR', {
-    //   year: 'numeric',
-    //   month: 'long',
-    //   day: 'numeric',
-    // });
-    // if (user) {
-    //   setLoadingAlert(true);
-    //   const locationBody = {
-    //     latitude: location?.coords.latitude,
-    //     longitude: location?.coords.longitude,
-    //     userId: user.uid,
-    //     alertType,
-    //     status: 'pending',
-    //     createdAt: new Date(),
-    //     hour,
-    //     date: formattedDate,
-    //     color,
-    //   };
-    //   try {
-    //     await addDoc(collection(FIRESTORE_DB, 'alerts'), locationBody);
-    //     emit('create alert', locationBody);
-    //     setShowSentMessage(true);
-    //     showSuccessAlert();
-    //   } catch (error) {
-    //     console.log(' ~ handleSendLocationPress ~ error:', error.message);
-    //   } finally {
-    //     setLoadingAlert(false);
-    //     setTimeout(() => {
-    //       setShowSentMessage(false);
-    //     }, 1500);
-    //   }
-    // } else {
-    //   console.error('El usuario no está autenticado');
-    // }
+    const user = FIREBASE_AUTH.currentUser;
+    const newDate = new Date();
+    const hour = newDate.toLocaleTimeString('es-AR', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+    const formattedDate = newDate.toLocaleDateString('es-AR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    if (user) {
+      setLoadingAlert(true);
+      const locationBody = {
+        latitude: location?.coords.latitude,
+        longitude: location?.coords.longitude,
+        userId: user.uid,
+        alertType,
+        status: 'pending',
+        createdAt: new Date(),
+        hour,
+        date: formattedDate,
+        color,
+      };
+      try {
+        await FIRESTORE_DB.collection('alerts').add(locationBody);
+        emit('create alert', locationBody);
+        // setShowSentMessage(true);
+        showSuccessAlert();
+      } catch (error) {
+        console.log(' ~ handleSendLocationPress ~ error:', error.message);
+      } finally {
+        setLoadingAlert(false);
+        setTimeout(() => {
+          // setShowSentMessage(false);
+        }, 1500);
+      }
+    } else {
+      console.error('El usuario no está autenticado');
+    }
     showSuccessAlert();
     console.log('HANDLE SEND LOCATION');
   };

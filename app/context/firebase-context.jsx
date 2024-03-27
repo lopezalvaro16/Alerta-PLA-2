@@ -1,6 +1,5 @@
 import React from 'react';
 import {createContext, useContext, useEffect, useState} from 'react';
-import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -21,9 +20,9 @@ const INITIAL_STATE = {
   singUpUser,
 };
 
-const AuthContext = createContext(INITIAL_STATE);
+const FirebaseContext = createContext(INITIAL_STATE);
 
-export const AuthProvider = ({children}) => {
+export const FirebaseProvider = ({children}) => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     const unsubscribe = FIREBASE_AUTH.onAuthStateChanged(authUser => {
@@ -39,11 +38,11 @@ export const AuthProvider = ({children}) => {
   }, []);
 
   return (
-    <AuthContext.Provider
+    <FirebaseContext.Provider
       value={{user, logInUser, singUpUser, FIRESTORE_DB, FIREBASE_AUTH}}>
       {children}
-    </AuthContext.Provider>
+    </FirebaseContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useFirebase = () => useContext(FirebaseContext);
