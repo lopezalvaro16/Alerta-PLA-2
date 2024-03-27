@@ -132,7 +132,7 @@ const RegisterScreen = ({navigation}) => {
               <TextInput
                 ref={dniInputRef}
                 style={[styles.input, {color: 'white'}]}
-                placeholder="10771100"
+                placeholder="Ingrese su dni"
                 value={dni}
                 placeholderTextColor="#ccc"
                 keyboardType="email-address"
