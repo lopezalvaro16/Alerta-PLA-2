@@ -9,6 +9,7 @@ import {
   FlatList,
   StatusBar,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Main from './main-screen';
@@ -55,49 +56,27 @@ const YourDrawerScreen = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: '#3a284e'}}>
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 50,
-          }}>
+    <View style={styles.container}>
+      <View style={styles.container1}>
+        <View style={styles.container2}>
           <Image
             source={require('../assets/ui-icons/usuario.png')}
-            style={{width: 70, height: 70, borderRadius: 35, marginLeft: 20}}
+            style={styles.image}
           />
-          <View style={{marginLeft: 20}}>
-            <Text style={{fontSize: 22, fontWeight: '800', color: '#fff'}}>
-              Lopez ALvaro
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                marginTop: 5,
-                fontWeight: '800',
-                color: '#fff',
-              }}>
-              Texto descriptivo
-            </Text>
+          <View style={styles.view1}>
+            <Text style={styles.nameText}>Lopez ALvaro</Text>
+            <Text style={styles.textDescription}>Texto descriptivo</Text>
           </View>
         </View>
-        <View style={{marginTop: 30}}>
+        <View style={styles.flatListContainer}>
           <FlatList
             data={menus}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 style={{
-                  width: 200,
-                  height: 50,
-                  marginLeft: 20,
-                  marginTop: 20,
+                  ...styles.logoutBtn,
                   backgroundColor:
                     selectedMenuItem === index ? '#725599' : '#6600ff',
-                  borderRadius: 10,
-                  flexDirection: 'row',
-                  alignItems: 'center',
                 }}
                 onPress={() => {
                   if (item.title === 'Salir') {
@@ -120,16 +99,13 @@ const YourDrawerScreen = () => {
                 <Image
                   source={item.icon}
                   style={{
-                    width: 24,
-                    height: 24,
-                    marginLeft: 15,
+                    ...styles.logoutIcon,
                     tintColor: selectedMenuItem === index ? '#000' : '#fff',
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 18,
-                    marginLeft: 20,
+                    ...styles.logoutItemTitle,
                     color: selectedMenuItem === index ? '#000' : '#fff',
                   }}>
                   {item.title}
@@ -142,24 +118,13 @@ const YourDrawerScreen = () => {
 
       <Animated.View
         style={{
-          flex: 1,
-          backgroundColor: 'white',
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
+          ...styles.animatedView,
           transform: [{scale}, {translateX: moveToRight}],
           borderRadius: showMenu ? 15 : 0,
         }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            height: 70,
-          }}>
+        <View style={styles.animatedViewContainer}>
           <TouchableOpacity
-            style={{marginLeft: 20}}
+            style={styles.animatedViewTouchable}
             onPress={() => {
               Animated.timing(scale, {
                 toValue: showMenu ? 1 : 0.7,
@@ -176,16 +141,13 @@ const YourDrawerScreen = () => {
             {!showMenu ? (
               <Image
                 source={require('../assets/ui-icons/menu.png')}
-                style={{
-                  width: 30,
-                  height: 30,
-                }}
+                style={styles.animatedViewImage}
               />
             ) : (
               <Icon name="arrow-back" size={40} color="black" />
             )}
           </TouchableOpacity>
-          <Text style={{marginLeft: 20, fontSize: 20, fontWeight: '800'}}>
+          <Text style={styles.animatedViewTxt}>
             {menus[selectedMenuItem].title}
           </Text>
         </View>
@@ -204,5 +166,64 @@ const YourDrawerScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  container1: {flex: 1, backgroundColor: '#3a284e'},
+  container2: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  image: {width: 70, height: 70, borderRadius: 35, marginLeft: 20},
+  view1: {marginLeft: 20},
+  nameText: {fontSize: 22, fontWeight: '800', color: '#fff'},
+  textDescription: {
+    fontSize: 14,
+    marginTop: 5,
+    fontWeight: '800',
+    color: '#fff',
+  },
+  flatListContainer: {marginTop: 30},
+  logoutBtn: {
+    width: 200,
+    height: 50,
+    marginLeft: 20,
+    marginTop: 20,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoutIcon: {
+    width: 24,
+    height: 24,
+    marginLeft: 15,
+  },
+  logoutItemTitle: {
+    fontSize: 18,
+    marginLeft: 20,
+  },
+  animatedView: {
+    flex: 1,
+    backgroundColor: 'white',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  animatedViewContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 70,
+  },
+  animatedViewImage: {
+    width: 30,
+    height: 30,
+  },
+  animatedViewTouchable: {marginLeft: 20},
+  animatedViewTxt: {marginLeft: 20, fontSize: 20, fontWeight: '800'},
+});
 
 export default YourDrawerScreen;
