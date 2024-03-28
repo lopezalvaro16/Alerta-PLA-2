@@ -16,6 +16,7 @@ import Main from './main-screen';
 import ProfileScreen from './profile-screen';
 import MovimientosScreen from './movements-screen';
 import UserSettingsScreen from './config-screen';
+import NumeroEmergencia from './number-emergency';
 
 const menus = [
   {icon: require('../assets/ui-icons/siren.png'), title: 'Alertas'},
@@ -24,6 +25,10 @@ const menus = [
   {
     icon: require('../assets/ui-icons/configuracion.png'),
     title: 'Configuración',
+  },
+  {
+    icon: require('../assets//ui-icons/llamada-telefonica.png'),
+    title: 'Telefonos',
   },
   {icon: require('../assets/ui-icons/cerrar-sesion.png'), title: 'Salir'},
 ];
@@ -160,6 +165,7 @@ const YourDrawerScreen = () => {
         {menus[selectedMenuItem].title === 'Configuración' && (
           <UserSettingsScreen />
         )}
+        {menus[selectedMenuItem].title === 'Telefonos' && <NumeroEmergencia />}
       </Animated.View>
 
       <StatusBar backgroundColor="black" barStyle="light-content" />

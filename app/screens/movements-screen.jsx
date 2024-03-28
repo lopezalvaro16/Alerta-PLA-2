@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,45 +9,61 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+} from '@react-native-firebase/firestore';
+import {useFirebase} from '../context/firebase-context';
+import {GOOGLE_API_KEY} from '../constants/api-constans';
 
 const MovimientosScreen = () => {
   const navigation = useNavigation();
+  const {FIRESTORE_DB, FIREBASE_AUTH} = useFirebase();
+  const [movimientos, setMovimientos] = useState([]);
+  const [selectedMovement, setSelectedMovement] = useState(null);
+  const [userLocation, setUserLocation] = useState('');
+
+  const userId = FIREBASE_AUTH.currentUser.uid;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = query(
+          collection(FIRESTORE_DB, 'alerts'),
+          where('userId', '==', userId),
+        );
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map(doc => doc.data());
+        setMovimientos(data);
+        if (data.length > 0) {
+          const lastMovement = data[data.length - 1];
+          const latitude = lastMovement.latitude;
+          const longitude = lastMovement.longitude;
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`,
+          );
+          const responseData = await response.json();
+          if (responseData.status === 'OK' && responseData.results.length > 0) {
+            const address = responseData.results[0].formatted_address;
+            console.log('Ubicación completa:', address);
+            setUserLocation(address);
+          } else {
+            console.error('No se pudo obtener la ubicación.');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [FIRESTORE_DB, userId]);
+
   const handleAddDetails = () => {
     navigation.navigate('AlertAddDetail');
     setSelectedMovement(null);
   };
-  const [movimientos] = useState([
-    {
-      tipo: 'Alerta de Robo',
-      action: 'checkmark-circle',
-      actionAdd: 'add-circle-outline',
-      colorAction: 'green',
-      fecha: '2023-11-14',
-      hora: '12:30 PM',
-      ubicacion:
-        'Ubicación 1 que es bastante larga y puede ocupar varias líneas para probar cómo se maneja el texto largo en el diseño.',
-    },
-    {
-      tipo: 'Alerta Vial',
-      action: 'close-circle',
-      actionAdd: 'add-circle-outline',
-      colorAction: 'red',
-      fecha: '2023-11-15',
-      hora: '13:45 PM',
-      ubicacion: 'Ubicación 2',
-    },
-    {
-      tipo: 'V. de Género',
-      action: 'time-outline',
-      actionAdd: 'add-circle-outline',
-      colorAction: 'orange',
-      fecha: '2023-11-15',
-      hora: '13:45 PM',
-      ubicacion: 'Ubicación 2',
-    },
-  ]);
-
-  const [selectedMovement, setSelectedMovement] = useState(null);
 
   const handleMovementPress = movement => {
     setSelectedMovement(movement);
@@ -65,23 +81,20 @@ const MovimientosScreen = () => {
           contentContainerStyle={styles.tableContent}>
           <View style={styles.tableRowData}>
             <Text style={styles.tableHeader}>Tipo</Text>
-
             <Text style={styles.tableHeader}>Hora</Text>
           </View>
-
           {movimientos.map((movimiento, index) => (
             <TouchableOpacity
               key={index.toString()}
               style={styles.tableRow}
               onPress={() => handleMovementPress(movimiento)}>
-              <Text style={styles.tableCell}>{movimiento.tipo}</Text>
-              <Text style={styles.tableCell}>{movimiento.hora}</Text>
+              <Text style={styles.tableCell}>{movimiento.alertType}</Text>
+              <Text style={styles.tableCell}>{movimiento.hour}</Text>
               <Icon
                 name={movimiento.action}
                 size={40}
                 color={movimiento.colorAction}
               />
-
               {movimiento.action === 'checkmark-circle' && (
                 <Icon
                   name={movimiento.actionAdd}
@@ -108,23 +121,22 @@ const MovimientosScreen = () => {
               <ScrollView style={styles.detailScrollView}>
                 <Text style={[styles.detailText, {color: '#fff'}]}>
                   <Text style={{fontWeight: 'bold'}}>Tipo: </Text>
-                  {selectedMovement?.tipo}
+                  {selectedMovement?.alertType}
                 </Text>
                 <Text style={[styles.detailText, {color: '#fff'}]}>
                   <Text style={{fontWeight: 'bold'}}>Fecha: </Text>
-                  {selectedMovement?.fecha}
+                  {selectedMovement?.date}
                 </Text>
                 <Text style={[styles.detailText, {color: '#fff'}]}>
                   <Text style={{fontWeight: 'bold'}}>Hora: </Text>
-                  {selectedMovement?.hora}
+                  {selectedMovement?.hour}
                 </Text>
                 <Text style={[styles.detailText, {color: '#fff'}]}>
                   <Text style={{fontWeight: 'bold'}}>Ubicación: </Text>
-                  {selectedMovement?.ubicacion}
+                  {userLocation}
                 </Text>
               </ScrollView>
             </View>
-
             <TouchableOpacity
               style={styles.addButton}
               onPress={handleAddDetails}>
@@ -136,7 +148,6 @@ const MovimientosScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
