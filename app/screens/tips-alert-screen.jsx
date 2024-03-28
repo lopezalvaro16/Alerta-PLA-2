@@ -82,11 +82,14 @@ const TipsView = ({route}) => {
             <Text style={styles.tip}>No hay información disponible.</Text>
           )}
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleDetallesPress}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleDetallesPress}>
           <Text style={styles.buttonText}>Agregar Detalles</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonOmit} onPress={handleOmitirPress}>
           <Text style={styles.buttonText}>Omitir</Text>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={styles.buttonOmit} onPress={handleOmitirPress}>
+          <Text style={styles.buttonText}>Aceptar</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

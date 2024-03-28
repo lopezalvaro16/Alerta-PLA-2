@@ -20,6 +20,7 @@ const RegisterScreen = ({navigation}) => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -28,6 +29,7 @@ const RegisterScreen = ({navigation}) => {
   const nombreInputRef = useRef(null);
   const apellidoInputRef = useRef(null);
   const dniInputRef = useRef(null);
+  const InputPhone = useRef(null);
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
   const repeatPasswordInputRef = useRef(null);
@@ -65,6 +67,7 @@ const RegisterScreen = ({navigation}) => {
       nombre,
       apellido,
       dni,
+      phone,
     };
     try {
       const userCredential = await singUpUser(email, password);
@@ -104,7 +107,6 @@ const RegisterScreen = ({navigation}) => {
                 onChangeText={setNombre}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                autoComplete="email"
                 autoCorrect={false}
                 returnKeyType="next"
                 onSubmitEditing={() => apellidoInputRef.current?.focus()}
@@ -121,7 +123,6 @@ const RegisterScreen = ({navigation}) => {
                 onChangeText={setApellido}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                autoComplete="email"
                 autoCorrect={false}
                 returnKeyType="next"
                 onSubmitEditing={() => dniInputRef.current?.focus()}
@@ -135,13 +136,28 @@ const RegisterScreen = ({navigation}) => {
                 placeholder="Ingrese su dni"
                 value={dni}
                 placeholderTextColor="#ccc"
-                keyboardType="email-address"
+                keyboardType="text"
                 onChangeText={setDni}
                 autoCapitalize="none"
-                autoComplete="email"
                 autoCorrect={false}
                 returnKeyType="next"
-                onSubmitEditing={() => dniInputRef.current?.focus()}
+                onSubmitEditing={() => InputPhone.current?.focus()}
+              />
+            </View>
+            <Text style={styles.text}>Telefono</Text>
+            <View style={styles.inputBox}>
+              <TextInput
+                ref={InputPhone}
+                style={[styles.input, {color: 'white'}]}
+                placeholder="Ingrese su Telefono"
+                value={phone}
+                placeholderTextColor="#ccc"
+                keyboardType="phone-pad"
+                onChangeText={setPhone}
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
               />
             </View>
             <Text style={styles.text}>Email</Text>
