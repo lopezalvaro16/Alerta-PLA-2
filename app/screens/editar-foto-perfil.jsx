@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,14 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import logo from '../assets/ui-icons/usuario.png';
+import {useFirebase} from '../context/firebase-context';
 
 const EditarFotoPerfil = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const {FIREBASE_STORAGE, FIREBASE_AUTH} = useFirebase();
 
   const openImage = async () => {
     const options = {
@@ -22,12 +24,15 @@ const EditarFotoPerfil = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        return;
-      }
-      setSelectedImage({localUri: response.uri});
-    });
+    const result = await launchImageLibrary(options);
+    if (
+      !result.didCancel &&
+      result.assets &&
+      result.assets.length > 0 &&
+      result.assets[0].uri
+    ) {
+      setSelectedImage({uri: result.assets[0].uri});
+    }
   };
 
   const openCamera = async () => {
@@ -37,16 +42,28 @@ const EditarFotoPerfil = () => {
       maxHeight: 150,
     };
 
-    ImagePicker.launchCamera(options, response => {
-      if (response.didCancel) {
-        return;
-      }
-      setSelectedImage({localUri: response.uri});
-    });
+    const result = await launchCamera(options);
+    if (
+      !result.didCancel &&
+      result.assets &&
+      result.assets.length > 0 &&
+      result.assets[0].uri
+    ) {
+      setSelectedImage({uri: result.assets[0].uri});
+    }
   };
 
-  const handleConfirm = () => {
-    Alert.alert('Imagen confirmada y guardada correctamente');
+  const handleConfirm = async () => {
+    try {
+      const reference = FIREBASE_STORAGE.ref(
+        `images/${FIREBASE_AUTH.currentUser.uid}-profile-photo.jpg`,
+      );
+      const pathToFile = selectedImage.uri;
+      await reference.putFile(pathToFile);
+      Alert.alert('Imagen confirmada y guardada correctamente');
+    } catch (error) {
+      Alert.alert('Error al guardar la imagen', error);
+    }
   };
 
   const handleCancel = () => {

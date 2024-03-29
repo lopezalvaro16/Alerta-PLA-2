@@ -2,9 +2,11 @@ import React from 'react';
 import {createContext, useContext, useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 const FIRESTORE_DB = firestore();
 const FIREBASE_AUTH = auth();
+const FIREBASE_STORAGE = storage();
 
 const logInUser = (email, password) =>
   FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
@@ -38,7 +40,14 @@ export const FirebaseProvider = ({children}) => {
 
   return (
     <FirebaseContext.Provider
-      value={{user, logInUser, singUpUser, FIRESTORE_DB, FIREBASE_AUTH}}>
+      value={{
+        user,
+        logInUser,
+        singUpUser,
+        FIRESTORE_DB,
+        FIREBASE_AUTH,
+        FIREBASE_STORAGE,
+      }}>
       {children}
     </FirebaseContext.Provider>
   );
