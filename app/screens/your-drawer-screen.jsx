@@ -17,6 +17,7 @@ import ProfileScreen from './profile-screen';
 import MovimientosScreen from './movements-screen';
 import UserSettingsScreen from './config-screen';
 import NumeroEmergencia from './number-emergency';
+import {useFirebase} from '../context/firebase-context';
 
 const menus = [
   {icon: require('../assets/ui-icons/siren.png'), title: 'Alertas'},
@@ -39,6 +40,7 @@ const YourDrawerScreen = () => {
   const scale = useRef(new Animated.Value(showMenu ? 0.7 : 1)).current;
   const [selectedMenuItem, setSelectedMenuItem] = useState(0);
   const navigation = useNavigation();
+  const {FIREBASE_AUTH} = useFirebase();
 
   const handleLogout = () => {
     Alert.alert(
@@ -52,6 +54,7 @@ const YourDrawerScreen = () => {
         {
           text: 'Aceptar',
           onPress: () => {
+            FIREBASE_AUTH.signOut();
             navigation.navigate('Home');
           },
         },
