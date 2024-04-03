@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -42,7 +42,26 @@ const YourDrawerScreen = () => {
   const scale = useRef(new Animated.Value(showMenu ? 0.7 : 1)).current;
   const [selectedMenuItem, setSelectedMenuItem] = useState(0);
   const navigation = useNavigation();
-  const {FIREBASE_AUTH} = useFirebase();
+  const {FIREBASE_AUTH, FIRESTORE_DB} = useFirebase();
+
+  const [displayName, setDisplayName] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        const response = await FIRESTORE_DB.collection('users')
+          .where('uid', '==', currentUser.uid)
+          .get();
+        const userData = response._docs[0]._data;
+        const displayName = `${userData.nombre} ${userData.apellido}`;
+        setDisplayName(displayName);
+      } catch (error) {
+        console.error('Error al cargar datos:', error.message, error.stack);
+      }
+    };
+    fetchUserData();
+  }, [FIREBASE_AUTH, FIRESTORE_DB]);
 
   const handleLogout = () => {
     Alert.alert(
@@ -78,8 +97,7 @@ const YourDrawerScreen = () => {
             style={styles.image}
           />
           <View style={styles.view1}>
-            <Text style={styles.nameText}>Lopez ALvaro</Text>
-            <Text style={styles.textDescription}>Texto descriptivo</Text>
+            <Text style={styles.nameText}>{displayName}</Text>
           </View>
         </View>
         <View style={styles.flatListContainer}>
