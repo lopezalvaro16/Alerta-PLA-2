@@ -29,7 +29,7 @@ const menus = [
     title: 'Configuración',
   },
   {
-    icon: require('../assets//ui-icons/llamada-telefonica.png'),
+    icon: require('../assets/ui-icons/llamada-telefonica.png'),
     title: 'Telefonos',
   },
   {icon: require('../assets/ui-icons/cerrar-sesion.png'), title: 'Salir'},
@@ -89,11 +89,13 @@ const YourDrawerScreen = () => {
       <View style={styles.container1}>
         <View style={styles.container2}>
           <Image
-            source={{
-              uri:
-                profilePhotoURLDownload ||
-                require('../assets/ui-icons/usuario.png'),
-            }}
+            source={
+              profilePhotoURLDownload
+                ? {
+                    uri: profilePhotoURLDownload,
+                  }
+                : require('../assets/ui-icons/usuario.png')
+            }
             style={styles.image}
           />
           <View style={styles.view1}>
