@@ -105,7 +105,7 @@ const RegisterScreen = ({navigation}) => {
                 value={nombre}
                 placeholderTextColor="#ccc"
                 onChangeText={setNombre}
-                keyboardType="email-address"
+                keyboardType="default"
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
@@ -121,7 +121,7 @@ const RegisterScreen = ({navigation}) => {
                 value={apellido}
                 placeholderTextColor="#ccc"
                 onChangeText={setApellido}
-                keyboardType="email-address"
+                keyboardType="default"
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
