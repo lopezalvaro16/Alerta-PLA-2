@@ -17,6 +17,7 @@ import {AlertProvider} from './app/context/AlertContext.jsx';
 import {SocketProvider} from './app/context/SocketContext.jsx';
 import TipsView from './app/screens/tips-alert-screen.jsx';
 import MailValidation from './app/screens/mail-validation.jsx';
+import {ProfilePhotoProvider} from './app/context/ProfilePhotoContext.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,76 +27,78 @@ function App() {
       <FirebaseProvider>
         <AlertProvider>
           <SocketProvider>
-            <StatusBar hidden barStyle="light-content" />
-            <NavigationContainer>
-              <Stack.Navigator
-                initialRouteName={'Home'}
-                screenOptions={{
-                  headerStyle: {
-                    backgroundColor: '#21233d',
-                  },
-                  headerTitleStyle: {
-                    color: 'white',
-                  },
-                  headerTintColor: 'white',
-                }}>
-                <Stack.Screen
-                  name="Home"
-                  component={HomeScreen}
-                  options={{title: ''}}
-                />
-                <Stack.Screen
-                  name="Login"
-                  component={LoginScreen}
-                  options={{title: ''}}
-                />
-                <Stack.Screen
-                  name="AlertAddDetail"
-                  component={AlertAddDetails}
-                  options={{title: 'Detalles'}}
-                />
-                <Stack.Screen
-                  name="Register"
-                  component={RegisterScreen}
-                  options={{title: ''}}
-                />
-                <Stack.Screen
-                  name="Splash"
-                  component={Splash}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name="YourDrawerScreen"
-                  component={YourDrawerScreen}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name="Main"
-                  component={Main}
-                  options={{title: ''}}
-                />
-                <Stack.Screen
-                  name="AlertConfirm"
-                  options={{headerShown: false}}
-                  component={AlertDetail}
-                />
-                <Stack.Screen
-                  name="EditarFotoPerfil"
-                  options={{title: ''}}
-                  component={EditarFotoPerfil}
-                />
-                <Stack.Screen
-                  name="TipsAlert"
-                  component={TipsView}
-                  options={{title: ''}}
-                />
-                <Stack.Screen
-                  name="MailValidation"
-                  component={MailValidation}
-                  options={{title: ''}}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
+            <ProfilePhotoProvider>
+              <StatusBar hidden barStyle="light-content" />
+              <NavigationContainer>
+                <Stack.Navigator
+                  initialRouteName={'Home'}
+                  screenOptions={{
+                    headerStyle: {
+                      backgroundColor: '#21233d',
+                    },
+                    headerTitleStyle: {
+                      color: 'white',
+                    },
+                    headerTintColor: 'white',
+                  }}>
+                  <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{title: ''}}
+                  />
+                  <Stack.Screen
+                    name="Login"
+                    component={LoginScreen}
+                    options={{title: ''}}
+                  />
+                  <Stack.Screen
+                    name="AlertAddDetail"
+                    component={AlertAddDetails}
+                    options={{title: 'Detalles'}}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
+                    options={{title: ''}}
+                  />
+                  <Stack.Screen
+                    name="Splash"
+                    component={Splash}
+                    options={{headerShown: false}}
+                  />
+                  <Stack.Screen
+                    name="YourDrawerScreen"
+                    component={YourDrawerScreen}
+                    options={{headerShown: false}}
+                  />
+                  <Stack.Screen
+                    name="Main"
+                    component={Main}
+                    options={{title: ''}}
+                  />
+                  <Stack.Screen
+                    name="AlertConfirm"
+                    options={{headerShown: false}}
+                    component={AlertDetail}
+                  />
+                  <Stack.Screen
+                    name="EditarFotoPerfil"
+                    options={{title: ''}}
+                    component={EditarFotoPerfil}
+                  />
+                  <Stack.Screen
+                    name="TipsAlert"
+                    component={TipsView}
+                    options={{title: ''}}
+                  />
+                  <Stack.Screen
+                    name="MailValidation"
+                    component={MailValidation}
+                    options={{title: ''}}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ProfilePhotoProvider>
           </SocketProvider>
         </AlertProvider>
       </FirebaseProvider>

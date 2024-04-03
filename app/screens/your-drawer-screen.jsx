@@ -18,6 +18,7 @@ import MovimientosScreen from './movements-screen';
 import UserSettingsScreen from './config-screen';
 import NumeroEmergencia from './number-emergency';
 import {useFirebase} from '../context/firebase-context';
+import {useProfilePhoto} from '../context/ProfilePhotoContext';
 
 const menus = [
   {icon: require('../assets/ui-icons/siren.png'), title: 'Alertas'},
@@ -35,6 +36,7 @@ const menus = [
 ];
 
 const YourDrawerScreen = () => {
+  const {profilePhotoURLDownload} = useProfilePhoto();
   const [showMenu, setShowMenu] = useState(false);
   const moveToRight = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(showMenu ? 0.7 : 1)).current;
@@ -68,7 +70,11 @@ const YourDrawerScreen = () => {
       <View style={styles.container1}>
         <View style={styles.container2}>
           <Image
-            source={require('../assets/ui-icons/usuario.png')}
+            source={{
+              uri:
+                profilePhotoURLDownload ||
+                require('../assets/ui-icons/usuario.png'),
+            }}
             style={styles.image}
           />
           <View style={styles.view1}>

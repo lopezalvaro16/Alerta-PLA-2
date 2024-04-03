@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import {useFirebase} from '../context/firebase-context';
+import {useProfilePhoto} from '../context/ProfilePhotoContext';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ const ProfileScreen = () => {
   };
 
   const [profileData, setProfileData] = useState(null);
+  const {profilePhotoURLDownload} = useProfilePhoto();
 
   const {FIREBASE_AUTH, FIRESTORE_DB} = useFirebase();
 
@@ -63,9 +65,9 @@ const ProfileScreen = () => {
             <Image
               style={styles.profileImage}
               source={
-                profileData?.photoURL
+                profilePhotoURLDownload
                   ? {
-                      uri: profileData?.photoURL,
+                      uri: profilePhotoURLDownload,
                     }
                   : require('../assets/ui-icons/usuario.png')
               }

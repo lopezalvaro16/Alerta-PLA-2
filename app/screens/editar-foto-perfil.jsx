@@ -12,10 +12,15 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import logo from '../assets/ui-icons/usuario.png';
 import {useFirebase} from '../context/firebase-context';
+import {useNavigation} from '@react-navigation/native';
+import {useProfilePhoto} from '../context/ProfilePhotoContext';
 
 const EditarFotoPerfil = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const {FIREBASE_STORAGE, FIREBASE_AUTH} = useFirebase();
+  const navigation = useNavigation();
+  const {setProfilePhoto} = useProfilePhoto();
 
   const openImage = async () => {
     const options = {
@@ -54,15 +59,22 @@ const EditarFotoPerfil = () => {
   };
 
   const handleConfirm = async () => {
-    try {
-      const reference = FIREBASE_STORAGE.ref(
-        `images/${FIREBASE_AUTH.currentUser.uid}-profile-photo.jpg`,
-      );
-      const pathToFile = selectedImage.uri;
-      await reference.putFile(pathToFile);
-      Alert.alert('Imagen confirmada y guardada correctamente');
-    } catch (error) {
-      Alert.alert('Error al guardar la imagen', error);
+    if (!isLoading) {
+      try {
+        setIsLoading(true);
+        const reference = FIREBASE_STORAGE.ref(
+          `images/${FIREBASE_AUTH.currentUser.uid}-profile-photo.jpg`,
+        );
+        const pathToFile = selectedImage.uri;
+        const response = await reference.putFile(pathToFile);
+        setProfilePhoto(response.metadata.name);
+        Alert.alert('Imagen confirmada y guardada correctamente');
+        navigation.goBack();
+      } catch (error) {
+        Alert.alert('Error al guardar la imagen', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -79,8 +91,8 @@ const EditarFotoPerfil = () => {
           <View style={styles.profilePicture}>
             <Image
               source={
-                selectedImage && selectedImage.localUri
-                  ? {uri: selectedImage.localUri}
+                selectedImage && selectedImage.uri
+                  ? {uri: selectedImage.uri}
                   : logo
               }
               style={styles.profileImage}
@@ -102,8 +114,13 @@ const EditarFotoPerfil = () => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 onPress={handleConfirm}
-                style={styles.confirmButton}>
-                <Text style={styles.buttonText}>Confirmar</Text>
+                style={{
+                  ...styles.confirmButton,
+                  backgroundColor: (isLoading && 'gray') || '#4CAF50',
+                }}>
+                <Text style={styles.buttonText}>
+                  {(!isLoading && 'Confirmar') || 'Cargando...'}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleCancel}
@@ -163,7 +180,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   confirmButton: {
-    backgroundColor: '#4CAF50',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
