@@ -1,7 +1,11 @@
-import {NavigationContainer} from '@react-navigation/native';
+import React, {createContext, useState, useContext} from 'react';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
 import AlertAddDetails from './app/screens/alert-add-details.jsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import LoginScreen from './app/screens/login-screen.jsx';
@@ -20,84 +24,99 @@ import MailValidation from './app/screens/mail-validation.jsx';
 import {ProfilePhotoProvider} from './app/context/ProfilePhotoContext.jsx';
 
 const Stack = createNativeStackNavigator();
+const ThemeContext = createContext();
 
 function App() {
+  const deviceTheme = useColorScheme();
+
+  const [theme, setTheme] = useState(deviceTheme === 'dark' ? 'dark' : 'light');
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  const currentTheme = theme === 'dark' ? DarkTheme : DefaultTheme;
   return (
     <SafeAreaProvider>
       <FirebaseProvider>
         <AlertProvider>
           <SocketProvider>
             <ProfilePhotoProvider>
-              <StatusBar hidden barStyle="light-content" />
-              <NavigationContainer>
-                <Stack.Navigator
-                  initialRouteName={'Home'}
-                  screenOptions={{
-                    headerStyle: {
-                      backgroundColor: '#21233d',
-                    },
-                    headerTitleStyle: {
-                      color: 'white',
-                    },
-                    headerTintColor: 'white',
-                  }}>
-                  <Stack.Screen
-                    name="Home"
-                    component={HomeScreen}
-                    options={{title: ''}}
-                  />
-                  <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                    options={{title: ''}}
-                  />
-                  <Stack.Screen
-                    name="AlertAddDetail"
-                    component={AlertAddDetails}
-                    options={{title: 'Detalles'}}
-                  />
-                  <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                    options={{title: ''}}
-                  />
-                  <Stack.Screen
-                    name="Splash"
-                    component={Splash}
-                    options={{headerShown: false}}
-                  />
-                  <Stack.Screen
-                    name="YourDrawerScreen"
-                    component={YourDrawerScreen}
-                    options={{headerShown: false}}
-                  />
-                  <Stack.Screen
-                    name="Main"
-                    component={Main}
-                    options={{title: ''}}
-                  />
-                  <Stack.Screen
-                    name="AlertConfirm"
-                    options={{headerShown: false}}
-                    component={AlertDetail}
-                  />
-                  <Stack.Screen
-                    name="EditarFotoPerfil"
-                    options={{title: ''}}
-                    component={EditarFotoPerfil}
-                  />
-                  <Stack.Screen
-                    name="TipsAlert"
-                    component={TipsView}
-                    options={{title: ''}}
-                  />
-                  <Stack.Screen
-                    name="MailValidation"
-                    component={MailValidation}
-                    options={{title: ''}}
-                  />
-                </Stack.Navigator>
-              </NavigationContainer>
+              <ThemeContext.Provider value={{theme, toggleTheme}}>
+                <StatusBar
+                  hidden
+                  barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+                />
+                <NavigationContainer theme={currentTheme}>
+                  <Stack.Navigator
+                    initialRouteName={'Home'}
+                    screenOptions={{
+                      headerStyle: {
+                        backgroundColor: currentTheme.colors.background,
+                      },
+                      headerTitleStyle: {
+                        color: currentTheme.colors.text,
+                      },
+                      headerTintColor: currentTheme.colors.text,
+                    }}>
+                    <Stack.Screen
+                      name="Home"
+                      component={HomeScreen}
+                      options={{title: ''}}
+                    />
+                    <Stack.Screen
+                      name="Login"
+                      component={LoginScreen}
+                      options={{title: ''}}
+                    />
+                    <Stack.Screen
+                      name="AlertAddDetail"
+                      component={AlertAddDetails}
+                      options={{title: 'Detalles'}}
+                    />
+                    <Stack.Screen
+                      name="Register"
+                      component={RegisterScreen}
+                      options={{title: ''}}
+                    />
+                    <Stack.Screen
+                      name="Splash"
+                      component={Splash}
+                      options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                      name="YourDrawerScreen"
+                      component={YourDrawerScreen}
+                      options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                      name="Main"
+                      component={Main}
+                      options={{title: ''}}
+                    />
+                    <Stack.Screen
+                      name="AlertConfirm"
+                      options={{headerShown: false}}
+                      component={AlertDetail}
+                    />
+                    <Stack.Screen
+                      name="EditarFotoPerfil"
+                      options={{title: ''}}
+                      component={EditarFotoPerfil}
+                    />
+                    <Stack.Screen
+                      name="TipsAlert"
+                      component={TipsView}
+                      options={{title: ''}}
+                    />
+                    <Stack.Screen
+                      name="MailValidation"
+                      component={MailValidation}
+                      options={{title: ''}}
+                    />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </ThemeContext.Provider>
             </ProfilePhotoProvider>
           </SocketProvider>
         </AlertProvider>

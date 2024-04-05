@@ -1,6 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
-import Geolocation from 'react-native-geolocation-service';
-import Geocoder from 'react-native-geocoding';
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -13,9 +10,12 @@ import {
   ScrollView,
   RefreshControl,
   PermissionsAndroid,
+  Appearance,
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
+import Geolocation from 'react-native-geolocation-service';
+import Geocoder from 'react-native-geocoding';
 import {useAlert} from '../context/AlertContext';
 import {useSocket} from '../context/SocketContext';
 import {useFirebase} from '../context/firebase-context';
@@ -27,7 +27,6 @@ const AlertDetail = () => {
   const navigation = useNavigation();
   const {alert} = useAlert();
   const {emit} = useSocket();
-
   const {FIRESTORE_DB, FIREBASE_AUTH} = useFirebase();
 
   const alertType = alert?.alertType || 'N/A';
@@ -40,8 +39,8 @@ const AlertDetail = () => {
   const [loading, setLoading] = useState(true);
   const [loadingAlert, setLoadingAlert] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
   const [showError, setShowError] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const fetchGeoLocationPermissons = async () => {
@@ -67,6 +66,12 @@ const AlertDetail = () => {
       }
     };
     fetchGeoLocationPermissons();
+
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setIsDarkMode(colorScheme === 'dark');
+    });
+
+    return () => subscription.remove();
   }, []);
 
   const fetchLocation = async () => {
@@ -82,6 +87,7 @@ const AlertDetail = () => {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
+
   const getAddressFromCoordinates = async (latitude, longitude) => {
     try {
       const addressResponse = await Geocoder.from({
@@ -182,21 +188,41 @@ const AlertDetail = () => {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[
+        styles.container,
+        {backgroundColor: isDarkMode ? '#000' : '#C9d9EC'},
+      ]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBackPress}>
-            <Icon name="arrow-back" size={30} color="black" />
+            <Icon
+              name="arrow-back"
+              size={30}
+              color={isDarkMode ? 'white' : 'black'}
+            />
           </TouchableOpacity>
           <View style={styles.containerText}>
             <Icon name="checkmark-circle" size={34} color="green" />
-            <Text style={styles.confirmText}>¡Confirme su alerta!</Text>
+            <Text
+              style={[
+                styles.confirmText,
+                {color: isDarkMode ? 'white' : 'black'},
+              ]}>
+              ¡Confirme su alerta!
+            </Text>
           </View>
           <View style={styles.containerStatus}>
-            <Text style={styles.dateTime}>
+            <Text
+              style={[
+                styles.dateTime,
+                {
+                  backgroundColor: isDarkMode ? 'black' : 'white',
+                  color: isDarkMode ? 'white' : 'black',
+                },
+              ]}>
               {date
                 ? capitalizeFirstLetter(
                     new Date(date).toLocaleString('es-AR', {
@@ -216,7 +242,11 @@ const AlertDetail = () => {
               <>
                 {showError ? (
                   <View style={styles.conteinerError}>
-                    <Text style={styles.errorText}>
+                    <Text
+                      style={[
+                        styles.errorText,
+                        {color: isDarkMode ? 'white' : 'black'},
+                      ]}>
                       Fallo al cargar su ubicación, deslice pantalla para abajo{' '}
                     </Text>
                     <Icon name="refresh-circle" size={30} color="gray" />
@@ -224,7 +254,11 @@ const AlertDetail = () => {
                 ) : (
                   <>
                     <ActivityIndicator size="small" color="#6600ff" />
-                    <Text style={styles.loadingText}>
+                    <Text
+                      style={[
+                        styles.loadingText,
+                        {color: isDarkMode ? 'white' : 'black'},
+                      ]}>
                       Cargando ubicación...
                     </Text>
                   </>
@@ -238,7 +272,11 @@ const AlertDetail = () => {
                   size={30}
                   color="gray"
                 />
-                <Text style={styles.senderAddress}>
+                <Text
+                  style={[
+                    styles.senderAddress,
+                    {color: isDarkMode ? 'white' : 'black'},
+                  ]}>
                   {address?.street || 'N/A'} {'\n'}
                   {address?.subregion ? `${address?.subregion}, ` : ''}
                   {address?.name ? `${address?.name}, ` : ''}
@@ -249,7 +287,11 @@ const AlertDetail = () => {
           </View>
         </View>
         <View style={styles.content}>
-          <Text style={styles.alertName}>{`${alertType}`}</Text>
+          <Text
+            style={[
+              styles.alertName,
+              {color: isDarkMode ? 'white' : 'black'},
+            ]}>{`${alertType}`}</Text>
           <Image source={alertImage} style={styles.image} />
         </View>
         <View style={styles.contentButton}>
@@ -262,12 +304,22 @@ const AlertDetail = () => {
             {loadingAlert ? (
               <View style={styles.buttonContent}>
                 <ActivityIndicator size="small" color="white" />
-                <Text style={styles.confirmButtonTextDisabled}>
+                <Text
+                  style={[
+                    styles.confirmButtonTextDisabled,
+                    {color: isDarkMode ? 'black' : 'white'},
+                  ]}>
                   Enviando alerta...
                 </Text>
               </View>
             ) : (
-              <Text style={styles.confirmButtonText}>Confirmar</Text>
+              <Text
+                style={[
+                  styles.confirmButtonText,
+                  {color: isDarkMode ? 'black' : 'white'},
+                ]}>
+                Confirmar
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -281,7 +333,6 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#C9d9EC',
   },
   header: {
     paddingTop: height * 0.05,

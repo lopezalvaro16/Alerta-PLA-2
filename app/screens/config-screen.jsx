@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,29 @@ import {
   TextInput,
   ScrollView,
   Dimensions,
+  Appearance,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const UserSettingsScreen = () => {
   const [firstName, setFirstName] = useState('Alvaro');
   const [lastName, setLastName] = useState('Apellido');
-  const [adress, setAdress] = useState('Calle');
+  const [address, setAddress] = useState('Calle');
   const [email, setEmail] = useState('usuario@gmail.com');
 
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingLastName, setIsEditingLastName] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setIsDarkMode(colorScheme === 'dark');
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   const handleSaveChanges = () => {
     setIsEditingFirstName(false);
@@ -29,12 +39,24 @@ const UserSettingsScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.containerScroll}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.containerScroll,
+        {backgroundColor: isDarkMode ? '#000' : '#CcdcEC'},
+      ]}>
       <View style={styles.container}>
-        <Text style={styles.label}>Nombre:</Text>
+        <Text style={[styles.label, {color: isDarkMode ? '#fff' : '#000'}]}>
+          Nombre:
+        </Text>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                color: isDarkMode ? '#fff' : '#000',
+                borderColor: isDarkMode ? '#fff' : 'gray',
+              },
+            ]}
             value={firstName}
             onChangeText={text => setFirstName(text)}
             placeholder="Nombre"
@@ -50,15 +72,22 @@ const UserSettingsScreen = () => {
             <TouchableOpacity
               onPress={() => setIsEditingFirstName(true)}
               style={styles.editButton}>
-              {/* <Ionicons name="create" size={20} color="#725599" /> */}
-              <Text style={styles.editButton}>Editar</Text>
+              <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
           )}
         </View>
-        <Text style={styles.label}>Apellido:</Text>
+        <Text style={[styles.label, {color: isDarkMode ? '#fff' : '#000'}]}>
+          Apellido:
+        </Text>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                color: isDarkMode ? '#fff' : '#000',
+                borderColor: isDarkMode ? '#fff' : 'gray',
+              },
+            ]}
             value={lastName}
             onChangeText={text => setLastName(text)}
             placeholder="Apellido"
@@ -74,18 +103,25 @@ const UserSettingsScreen = () => {
             <TouchableOpacity
               onPress={() => setIsEditingLastName(true)}
               style={styles.editButton}>
-              {/* <Ionicons name="create" size={20} color="#725599" /> */}
-              <Text style={styles.editButton}>Editar</Text>
+              <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
           )}
         </View>
-        <Text style={styles.label}>Dirección:</Text>
+        <Text style={[styles.label, {color: isDarkMode ? '#fff' : '#000'}]}>
+          Dirección:
+        </Text>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
-            value={adress}
-            onChangeText={text => setAdress(text)}
-            placeholder="Nombre"
+            style={[
+              styles.input,
+              {
+                color: isDarkMode ? '#fff' : '#000',
+                borderColor: isDarkMode ? '#fff' : 'gray',
+              },
+            ]}
+            value={address}
+            onChangeText={text => setAddress(text)}
+            placeholder="Dirección"
             editable={isEditingAddress}
           />
           {isEditingAddress ? (
@@ -98,18 +134,25 @@ const UserSettingsScreen = () => {
             <TouchableOpacity
               onPress={() => setIsEditingAddress(true)}
               style={styles.editButton}>
-              {/* <Ionicons name="create" size={20} color="#725599" /> */}
-              <Text style={styles.editButton}>Editar</Text>
+              <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
           )}
         </View>
-        <Text style={styles.label}>Correo Electrónico:</Text>
+        <Text style={[styles.label, {color: isDarkMode ? '#fff' : '#000'}]}>
+          Correo Electrónico:
+        </Text>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                color: isDarkMode ? '#fff' : '#000',
+                borderColor: isDarkMode ? '#fff' : 'gray',
+              },
+            ]}
             value={email}
             onChangeText={text => setEmail(text)}
-            placeholder="Nombre"
+            placeholder="Correo Electrónico"
             editable={isEditingEmail}
           />
           {isEditingEmail ? (
@@ -122,31 +165,34 @@ const UserSettingsScreen = () => {
             <TouchableOpacity
               onPress={() => setIsEditingEmail(true)}
               style={styles.editButton}>
-              {/* <Ionicons name="create" size={20} color="#725599" /> */}
-              <Text style={styles.editButton}>Editar</Text>
+              <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
           )}
         </View>
 
-        <TouchableOpacity onPress={handleSaveChanges} style={styles.saveButton}>
+        <TouchableOpacity
+          onPress={handleSaveChanges}
+          style={[
+            styles.saveButton,
+            {backgroundColor: isDarkMode ? '#6600ff' : '#725599'},
+          ]}>
           <Text style={styles.saveButtonText}>Guardar Cambios</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
+
 const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   containerScroll: {
-    flex: 1,
-    backgroundColor: '#CcdcEC',
+    flexGrow: 1,
   },
   container: {
     flex: 1,
     overflow: 'hidden',
     height: '100%',
-    backgroundColor: '#f0f0f0',
     margin: 25,
     padding: 30,
     shadowColor: '#000',
@@ -176,17 +222,16 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderBottomWidth: 1,
-    borderBottomColor: 'gray',
     padding: 10,
     borderRadius: 5,
   },
   editButton: {
-    fontSize: 18,
     marginLeft: 10,
+  },
+  editButtonText: {
     color: '#725599',
   },
   saveButton: {
-    backgroundColor: '#6600ff',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

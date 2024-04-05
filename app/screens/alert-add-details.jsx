@@ -1,7 +1,7 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Image,
   TextInput,
   FlatList,
+  Appearance,
 } from 'react-native';
 
 const logo = require('../assets/ui-icons/anadir-foto.png');
@@ -21,7 +22,16 @@ const windowHeight = Dimensions.get('window').height;
 const AlertAddDetails = () => {
   const [description, setDescription] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setIsDarkMode(colorScheme === 'dark');
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   const options = {
     mediaType: 'photo',
@@ -30,6 +40,7 @@ const AlertAddDetails = () => {
     maxHeight: 2000,
     quality: 0.8,
   };
+
   const openImage = async () => {
     if (selectedImages.length < 3) {
       const result = await launchImageLibrary(options);
@@ -71,23 +82,38 @@ const AlertAddDetails = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Importante</Text>
-      <Text style={styles.introText}>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: isDarkMode ? '#000' : '#fff'},
+      ]}>
+      <Text style={[styles.title, {color: isDarkMode ? '#fff' : '#000'}]}>
+        Importante
+      </Text>
+      <Text style={[styles.introText, {color: isDarkMode ? '#fff' : '#000'}]}>
         Esta información es crucial para la P.L.A y contribuirá
         significativamente a mejorar la eficacia de las respuestas de
         emergencia, garantizando un entorno más seguro para todos.
       </Text>
-      <Text style={styles.title}>Detalles de la Alerta</Text>
+      <Text style={[styles.title, {color: isDarkMode ? '#fff' : '#000'}]}>
+        Detalles de la Alerta
+      </Text>
       <TextInput
-        style={[styles.input, {height: windowHeight * 0.1}]}
+        style={[
+          styles.input,
+          {
+            height: windowHeight * 0.1,
+            backgroundColor: isDarkMode ? '#333' : '#fff',
+            color: isDarkMode ? '#fff' : '#000',
+          },
+        ]}
         placeholder="Descripción opcional"
         value={description}
         multiline
         numberOfLines={4}
         onChangeText={text => setDescription(text)}
       />
-      <Text style={styles.titleCamera}>
+      <Text style={[styles.titleCamera, {color: isDarkMode ? '#fff' : '#000'}]}>
         Agrega fotos (máximo {3 - selectedImages.length})
       </Text>
       <View style={styles.imageContainer}>

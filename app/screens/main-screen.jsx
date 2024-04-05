@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
   },
   textAlert: {
     fontSize: width * 0.06,
+    color: '#000',
   },
   image: {
     width: width * 0.3,
