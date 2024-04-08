@@ -15,6 +15,10 @@ import {useProfilePhoto} from '../context/ProfilePhotoContext';
 
 const {width, height} = Dimensions.get('window');
 
+const capitalizeFirstLetter = str => {
+  return str.replace(/\b\w/g, char => char.toUpperCase());
+};
+
 const ProfileScreen = () => {
   const navigation = useNavigation();
 
@@ -35,8 +39,10 @@ const ProfileScreen = () => {
           .where('uid', '==', currentUser.uid)
           .get();
         const userData = response._docs[0]._data;
-        const displayName = `${userData.nombre} ${userData.apellido}`;
-        const phoneNumber = userData.telefono;
+        const displayName = `${capitalizeFirstLetter(
+          userData.nombre,
+        )} ${capitalizeFirstLetter(userData.apellido)}`;
+        const phoneNumber = userData.phone;
         const photoURL = userData.photoURL;
         const dniUser = userData.dni;
         setProfileData({

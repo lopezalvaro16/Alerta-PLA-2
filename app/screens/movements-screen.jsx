@@ -119,29 +119,29 @@ const MovimientosScreen = () => {
             <View style={styles.contentContenidoModal}>
               <Text style={styles.modalTitle}>Detalles del Movimiento</Text>
               <ScrollView style={styles.detailScrollView}>
-                <Text style={[styles.detailText, {color: '#fff'}]}>
+                <Text style={[styles.detailText, {color: 'black'}]}>
                   <Text style={{fontWeight: 'bold'}}>Tipo: </Text>
                   {selectedMovement?.alertType}
                 </Text>
-                <Text style={[styles.detailText, {color: '#fff'}]}>
+                <Text style={[styles.detailText, {color: 'black'}]}>
                   <Text style={{fontWeight: 'bold'}}>Fecha: </Text>
                   {selectedMovement?.date}
                 </Text>
-                <Text style={[styles.detailText, {color: '#fff'}]}>
+                <Text style={[styles.detailText, {color: 'black'}]}>
                   <Text style={{fontWeight: 'bold'}}>Hora: </Text>
                   {selectedMovement?.hour}
                 </Text>
-                <Text style={[styles.detailText, {color: '#fff'}]}>
+                <Text style={[styles.detailText, {color: 'black'}]}>
                   <Text style={{fontWeight: 'bold'}}>Ubicación: </Text>
                   {userLocation}
                 </Text>
               </ScrollView>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.addButton}
               onPress={handleAddDetails}>
               <Text style={styles.buttonText}>Agregar detalles</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: 'white',
+    color: 'black',
   },
   closeButton: {
     padding: 10,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
 
   detailText: {
-    color: '#555',
+    color: 'black',
     textAlign: 'justify',
     marginBottom: 10,
   },
@@ -262,10 +262,10 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   contentContenidoModal: {
-    borderColor: 'black',
-    borderRadius: 15,
-    borderWidth: 1,
-    backgroundColor: '#aaaccc',
+    // borderColor: 'black',
+    // borderRadius: 15,
+    // borderWidth: 1,
+    // backgroundColor: '#aaaccc',
     padding: 15,
   },
 });

@@ -10,6 +10,7 @@ import {
   Appearance,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useFirebase} from '../context/firebase-context';
 
 const UserSettingsScreen = () => {
   const [firstName, setFirstName] = useState('Alvaro');
@@ -23,6 +24,9 @@ const UserSettingsScreen = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const [profileData, setProfileData] = useState(null);
+  const {FIREBASE_AUTH, FIRESTORE_DB} = useFirebase();
+
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setIsDarkMode(colorScheme === 'dark');
@@ -31,11 +35,44 @@ const UserSettingsScreen = () => {
     return () => subscription.remove();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const currentUser = FIREBASE_AUTH.currentUser;
+        const response = await FIRESTORE_DB.collection('users')
+          .where('uid', '==', currentUser.uid)
+          .get();
+        const userData = response._docs[0]._data;
+        const displayName = userData.nombre;
+        const lastName = userData.apellido;
+        const phoneNumber = userData.phone;
+        const photoURL = userData.photoURL;
+        const dniUser = userData.dni;
+        setProfileData({
+          email: currentUser.email,
+          displayName: displayName || 'No verificado',
+          lastName: lastName || 'No verificado',
+          photoURL: photoURL,
+          phoneNumber: phoneNumber || '--- ---',
+          dniUser: dniUser || '--- ---',
+        });
+      } catch (error) {
+        console.error('Error al cargar datos:', error.message, error.stack);
+      }
+    };
+    fetchData();
+  }, [FIREBASE_AUTH, FIRESTORE_DB]);
+
   const handleSaveChanges = () => {
     setIsEditingFirstName(false);
     setIsEditingLastName(false);
     setIsEditingAddress(false);
     setIsEditingEmail(false);
+  };
+
+  // Función para capitalizar la primera letra de cada palabra en una cadena
+  const capitalizeFirstLetter = str => {
+    return str.replace(/\b\w/g, char => char.toUpperCase());
   };
 
   return (
@@ -57,11 +94,16 @@ const UserSettingsScreen = () => {
                 borderColor: isDarkMode ? '#fff' : 'gray',
               },
             ]}
-            value={firstName}
+            value={
+              profileData ? capitalizeFirstLetter(profileData.displayName) : ''
+            }
             onChangeText={text => setFirstName(text)}
-            placeholder="Nombre"
+            placeholder={
+              profileData ? capitalizeFirstLetter(profileData.displayName) : ''
+            }
             editable={isEditingFirstName}
           />
+
           {isEditingFirstName ? (
             <TouchableOpacity
               onPress={handleSaveChanges}
@@ -88,7 +130,9 @@ const UserSettingsScreen = () => {
                 borderColor: isDarkMode ? '#fff' : 'gray',
               },
             ]}
-            value={lastName}
+            value={
+              profileData ? capitalizeFirstLetter(profileData.lastName) : ''
+            }
             onChangeText={text => setLastName(text)}
             placeholder="Apellido"
             editable={isEditingLastName}
@@ -108,7 +152,7 @@ const UserSettingsScreen = () => {
           )}
         </View>
         <Text style={[styles.label, {color: isDarkMode ? '#fff' : '#000'}]}>
-          Dirección:
+          Numero:
         </Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -119,9 +163,13 @@ const UserSettingsScreen = () => {
                 borderColor: isDarkMode ? '#fff' : 'gray',
               },
             ]}
-            value={address}
+            value={
+              profileData ? capitalizeFirstLetter(profileData.phoneNumber) : ''
+            }
             onChangeText={text => setAddress(text)}
-            placeholder="Dirección"
+            placeholder={
+              profileData ? capitalizeFirstLetter(profileData.phoneNumber) : ''
+            }
             editable={isEditingAddress}
           />
           {isEditingAddress ? (
@@ -150,9 +198,9 @@ const UserSettingsScreen = () => {
                 borderColor: isDarkMode ? '#fff' : 'gray',
               },
             ]}
-            value={email}
+            value={profileData ? profileData.email : ''}
             onChangeText={text => setEmail(text)}
-            placeholder="Correo Electrónico"
+            placeholder={profileData ? profileData.email : ''}
             editable={isEditingEmail}
           />
           {isEditingEmail ? (
@@ -190,6 +238,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   container: {
+    backgroundColor: 'white',
     flex: 1,
     overflow: 'hidden',
     height: '100%',

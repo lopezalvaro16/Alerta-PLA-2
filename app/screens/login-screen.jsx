@@ -21,6 +21,14 @@ const LoginScreen = ({navigation}) => {
   const {logInUser} = useFirebase();
 
   const handleLogin = async () => {
+    if (email.trim() === '' || password === '') {
+      Alert.alert(
+        'Error',
+        'Por favor ingresa tu correo electrónico y contraseña.',
+      );
+      return;
+    }
+
     try {
       await logInUser(email, password);
       navigation.navigate('Splash');

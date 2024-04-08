@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Image,
 } from 'react-native';
+import logo from '../assets/logos/logo-pla.png';
 
 const HomeScreen = ({navigation}) => {
   useEffect(() => {
@@ -30,7 +32,7 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        {/* <Image source={logo} style={styles.logo} /> */}
+        <Image source={logo} style={styles.logo} />
         <Text style={styles.logoText}>Ciudad Segura PLA</Text>
       </View>
       <View style={styles.contentContainer}>

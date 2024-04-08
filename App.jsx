@@ -52,12 +52,12 @@ function App() {
                     initialRouteName={'Home'}
                     screenOptions={{
                       headerStyle: {
-                        backgroundColor: currentTheme.colors.background,
+                        backgroundColor: '#21233d',
                       },
                       headerTitleStyle: {
                         color: currentTheme.colors.text,
                       },
-                      headerTintColor: currentTheme.colors.text,
+                      headerTintColor: 'white',
                     }}>
                     <Stack.Screen
                       name="Home"

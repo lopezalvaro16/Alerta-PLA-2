@@ -59,10 +59,29 @@ const RegisterScreen = ({navigation}) => {
   };
 
   const handleRegister = async () => {
+    if (
+      !nombre.trim() ||
+      !apellido.trim() ||
+      !dni.trim() ||
+      !phone.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !repeatPassword.trim()
+    ) {
+      Alert.alert('Error', 'Por favor completa todos los campos.');
+      return;
+    }
+
     if (Object.values(errors).some(error => error !== '')) {
       console.log('Hay errores en el formulario. No se puede registrar.');
       return;
     }
+
+    if (password !== repeatPassword) {
+      Alert.alert('Error', 'Las contraseñas no coinciden');
+      return;
+    }
+
     const additionalData = {
       nombre,
       apellido,
@@ -81,14 +100,15 @@ const RegisterScreen = ({navigation}) => {
       navigation.navigate('MailValidation');
     } catch (error) {
       console.error('Error al registrar usuario', error);
-      Alert.alert(error.message);
+      Alert.alert('Error', error.message);
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
           <View style={styles.containerTitle}>
@@ -136,7 +156,7 @@ const RegisterScreen = ({navigation}) => {
                 placeholder="Ingrese su dni"
                 value={dni}
                 placeholderTextColor="#ccc"
-                keyboardType="text"
+                keyboardType="default"
                 onChangeText={setDni}
                 autoCapitalize="none"
                 autoCorrect={false}
